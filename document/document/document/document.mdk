@@ -1,0 +1,26 @@
+Title     : Deal with imbalanced dataset
+Author    :
+Logo      : True
+
+[TITLE]
+
+# Papers
+* IEEE paper on imbalanced dataset [1]
+* On class imbalance problem [2]
+# Blog describing this problem
+* blog: deal with imbalanced dataset [3]
+
+# Tool/library
+* Python library: imbalance-learn [4]
+* Python library: StratifiedShuffleSplit and StratifiedKFold [5]
+
+  - Explanation on the difference between the two [5]
+
+
+[3]: https://svds.com/learning-imbalanced-classes/
+[4]: https://pypi.python.org/pypi/imbalanced-learn
+[6]: http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedShuffleSplit.html#sklearn.model_selection.StratifiedShuffleSplit
+[5]: http://stackoverflow.com/questions/32615429/k-fold-stratified-cross-validation-with-imbalanced-classes
+[1]: http://www.ele.uri.edu/faculty/he/PDFfiles/ImbalancedLearning.pdf
+[2]: http://sci2s.ugr.es/keel/pdf/specific/congreso/guo_on_2008.pdf
+
