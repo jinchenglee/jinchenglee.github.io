@@ -1,0 +1,19 @@
+Title         : Deal with imbalanced dataset
+
+[TITLE]
+
+# Blog describing this problem
+* [blog: deal with imbalanced dataset]
+
+# Tool/library
+* [imbalance-learn] 
+* [StratifiedShuffleSplit and StratifiedKFold]
+
+  - [Explanation on the difference between the two]
+
+
+[reference manual]: http://research.microsoft.com/en-us/um/people/daan/madoko/doc/reference.html  "Madoko reference manual"
+[blog: deal with imbalanced dataset]: https://svds.com/learning-imbalanced-classes/
+[imbalance-learn]: https://pypi.python.org/pypi/imbalanced-learn
+[StratifiedShuffleSplit and StratifiedKFold]: http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedShuffleSplit.html#sklearn.model_selection.StratifiedShuffleSplit
+[Explanation on the difference between the two]: http://stackoverflow.com/questions/32615429/k-fold-stratified-cross-validation-with-imbalanced-classes
