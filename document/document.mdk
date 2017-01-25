@@ -1,7 +1,7 @@
-Title         : Deal with imbalanced dataset
+Deal with imbalanced dataset
 
-[TITLE]
 
+# [IEEE paper on imbalanced dataset]
 # Blog describing this problem
 * [blog: deal with imbalanced dataset]
 
@@ -17,3 +17,4 @@ Title         : Deal with imbalanced dataset
 [imbalance-learn]: https://pypi.python.org/pypi/imbalanced-learn
 [StratifiedShuffleSplit and StratifiedKFold]: http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedShuffleSplit.html#sklearn.model_selection.StratifiedShuffleSplit
 [Explanation on the difference between the two]: http://stackoverflow.com/questions/32615429/k-fold-stratified-cross-validation-with-imbalanced-classes
+[IEEE paper on imbalanced dataset]: http://www.ele.uri.edu/faculty/he/PDFfiles/ImbalancedLearning.pdf
