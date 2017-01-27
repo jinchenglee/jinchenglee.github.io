@@ -1,0 +1,37 @@
+Title         :
+Author        : 
+Logo          : True
+
+[TITLE]
+
+# Formula
+* Linear System State Equation
+~ Equation { #eq-euler }
+X_k = A * X_{k-1} + B * u_{k-1} + w_{k-1}
+~
+  - X_k: State at time k, size [n,1]
+  - A: State transition matrix, size [n,n]
+  - u_k-1: System input at time k-1 that affect state at time k, size [m,1]
+  - B: Input to state transition matrix, size [n,m]
+  - w: System noise, size [n,1]
+
+* State Measurement Equation
+~ Equation { #eq-euler }
+Z_k = H * X_k + v_k
+~
+  - Z_k: Measurement of state at time k, size[**p**,1]
+  - H: State to measurement transition matrix, size[n,**p**]
+  - v: Measurement noise, size [n,1]
+
+
+# Useful links
+* Blogs explaining how KF works.
+  - How a Kalman filter works, in pictures. [1]
+  - Deduce the formula from least square error perspective (in Chinese). 卡尔曼滤波 -- 从推导到应用 [2]
+  - Yet another explanation from Bayesian probability perspective, [3].
+  - Closely related to last reference, but in Chinese. Kalman滤波器从原理到实现 [4]. 
+
+[1]: http://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/ 
+[2]: http://blog.csdn.net/heyijia0327/article/details/17487467
+[3]: https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=0ahUKEwjW9NuLpuPRAhVHKWMKHaIADdMQFggeMAA&url=https%3A%2F%2Fwww.cl.cam.ac.uk%2F~rmf25%2Fpapers%2FUnderstanding%2520the%2520Basis%2520of%2520the%2520Kalman%2520Filter.pdf&usg=AFQjCNEfEO90H_qIDDr0gc1N9_u2ojyX9Q&sig2=sx9AogQdQgyGiSVyDXtqOg
+[4]: http://xiahouzuoxin.github.io/notes/html/Kalman%E6%BB%A4%E6%B3%A2%E5%99%A8%E4%BB%8E%E5%8E%9F%E7%90%86%E5%88%B0%E5%AE%9E%E7%8E%B0.html
