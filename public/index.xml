@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Vitob&#39;s Blog Site</title>
+    <link>https://jinchenglee.github.io/</link>
+    <description>Recent content on Vitob&#39;s Blog Site</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 01 Jun 2024 18:19:45 -0700</lastBuildDate>
+    <atom:link href="https://jinchenglee.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>My First Post</title>
+      <link>https://jinchenglee.github.io/blog/my-first-post/</link>
+      <pubDate>Sat, 01 Jun 2024 18:19:45 -0700</pubDate>
+      <guid>https://jinchenglee.github.io/blog/my-first-post/</guid>
+      <description>This is my first blog using Hugo generated contents backed by github.io.&#xA;It records how to add new blog article using markdown.&#xA;Steps to add a blog article Go to synced down blog_markdown. Create new markdown file. cd blog_markdown/vitob-blog hugo new content blog/xxx.md Edit xxx.md Preview by running &amp;lsquo;$&amp;gt; hugo server -D&amp;rsquo; Continue; Steps to publish If satisfied with preview at http://localhost:1313/, changing &amp;lsquo;draft = true&amp;rsquo; to &amp;lsquo;draft = false&amp;rsquo; in xxx.</description>
+    </item>
+  </channel>
+</rss>
