@@ -1,12 +1,75 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><?xml-stylesheet href="/feed_style.xsl" type="text/xsl"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="https://www.rssboard.org/media-rss">
   <channel>
     <title>Vitob&#39;s Blog Site</title>
     <link>https://jinchenglee.github.io/</link>
     <description>Recent content on Vitob&#39;s Blog Site</description>
-    <generator>Hugo</generator>
+    <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate></lastBuildDate>
-    <atom:link href="https://jinchenglee.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 01 Jun 2024 18:19:45 -0700</lastBuildDate><atom:link href="https://jinchenglee.github.io/index.xml" rel="self" type="application/rss+xml" /><icon>https://jinchenglee.github.io/img/icon.svg</icon>
+    
+    
+    <item>
+      <title>My First Post</title>
+      <link>https://jinchenglee.github.io/blog/my-first-post/</link>
+      <pubDate>Sat, 01 Jun 2024 18:19:45 -0700</pubDate>
+      
+      <guid>https://jinchenglee.github.io/blog/my-first-post/</guid>
+      <description><![CDATA[<p>This is my first blog using Hugo generated contents backed by github.io.</p>
+<p>It records how to add new blog article using markdown.</p>
+<h2 id="steps-to-add-a-blog-article">Steps to add a blog article</h2>
+<ol>
+<li>Go to synced down <a href="https://github.com/jinchenglee/blog_markdown">blog_markdown</a>.</li>
+<li>Create new markdown file.</li>
+</ol>
+<pre tabindex="0"><code>cd blog_markdown/vitob-blog
+hugo new content blog/xxx.md
+</code></pre><ol start="3">
+<li>Edit xxx.md</li>
+<li>Preview by running &lsquo;$&gt; hugo server -D&rsquo;</li>
+</ol>
+<h2 id="continue-steps-to-publish">Continue; Steps to publish</h2>
+<ol start="5">
+<li>If satisfied with preview at http://localhost:1313/, changing &lsquo;draft = true&rsquo; to &lsquo;draft = false&rsquo; in xxx.md. Then run &lsquo;$&gt; hugo&rsquo; to generate contents under public subdirectory.</li>
+<li>Copy or move public/* to synced down <a href="git@github.com:jinchenglee/jinchenglee.github.io.git">github.io</a> repository and then push it to github.</li>
+</ol>
+]]></description>
+      
+    </item>
+    
+    
+    
+    <item>
+      <title>My First Post</title>
+      <link>https://jinchenglee.github.io/posts/my-first-post/</link>
+      <pubDate>Sat, 01 Jun 2024 18:19:45 -0700</pubDate>
+      
+      <guid>https://jinchenglee.github.io/posts/my-first-post/</guid>
+      <description><![CDATA[<p>This is my first blog using Hugo generated contents backed by github.io.</p>
+<p>It records how to add new blog article using markdown.</p>
+<h2 id="steps-to-add-a-blog-article">Steps to add a blog article</h2>
+<ol>
+<li>Go to synced down <a href="https://github.com/jinchenglee/blog_markdown">blog_markdown</a>.</li>
+<li>Create new markdown file.</li>
+</ol>
+<pre tabindex="0"><code>cd blog_markdown/vitob-blog
+hugo new content blog/xxx.md
+</code></pre><ol start="3">
+<li>Edit xxx.md</li>
+<li>Preview by running &lsquo;$&gt; hugo server -D&rsquo;</li>
+</ol>
+<h2 id="continue-steps-to-publish">Continue; Steps to publish</h2>
+<ol start="5">
+<li>If satisfied with preview at http://localhost:1313/, changing &lsquo;draft = true&rsquo; to &lsquo;draft = false&rsquo; in xxx.md. Then run &lsquo;$&gt; hugo&rsquo; to generate contents under public subdirectory.</li>
+<li>Copy or move public/* to synced down <a href="git@github.com:jinchenglee/jinchenglee.github.io.git">github.io</a> repository and then push it to github.</li>
+</ol>
+]]></description>
+      
+    </item>
+    
+    
+    
+    
+    
+    
   </channel>
 </rss>

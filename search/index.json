@@ -1,0 +1,17 @@
+
+{
+    
+    
+    
+    
+        
+        
+        
+    
+        
+        
+        
+    
+    "pages": [{"date":"2024-06-01","image":"","imageAlt":"","link":"https://jinchenglee.github.io/blog/my-first-post/","summary":"This is my first blog using Hugo generated contents backed by github.io.\nIt records how to add new blog article using markdown.\nSteps to add a blog article Go to synced down blog_markdown. Create new markdown file. cd blog_markdown/vitob-blog hugo new content blog/xxx.md Edit xxx.md Preview by running \u0026lsquo;$\u0026gt; hugo server -D\u0026rsquo; Continue; Steps to publish If satisfied with preview at http://localhost:1313/, changing \u0026lsquo;draft = true\u0026rsquo; to \u0026lsquo;draft = false\u0026rsquo; in xxx.","tags":[],"text":"this is my first blog using hugo generated contents backed by github.io.\nit records how to add new blog article using markdown.\nsteps to add a blog article go to synced down blog_markdown. create new markdown file. cd blog_markdown/vitob-blog hugo new content blog/xxx.md edit xxx.md preview by running \u0026lsquo;$\u0026gt; hugo server -d\u0026rsquo; continue; steps to publish if satisfied with preview at http://localhost:1313/, changing \u0026lsquo;draft = true\u0026rsquo; to \u0026lsquo;draft = false\u0026rsquo; in xxx.md. then run \u0026lsquo;$\u0026gt; hugo\u0026rsquo; to generate contents under public subdirectory. copy or move public/* to synced down github.io repository and then push it to github. ","title":"My First Post"},{"date":"2024-06-01","image":"","imageAlt":"","link":"https://jinchenglee.github.io/posts/my-first-post/","summary":"This is my first blog using Hugo generated contents backed by github.io.\nIt records how to add new blog article using markdown.\nSteps to add a blog article Go to synced down blog_markdown. Create new markdown file. cd blog_markdown/vitob-blog hugo new content blog/xxx.md Edit xxx.md Preview by running \u0026lsquo;$\u0026gt; hugo server -D\u0026rsquo; Continue; Steps to publish If satisfied with preview at http://localhost:1313/, changing \u0026lsquo;draft = true\u0026rsquo; to \u0026lsquo;draft = false\u0026rsquo; in xxx.","tags":[],"text":"this is my first blog using hugo generated contents backed by github.io.\nit records how to add new blog article using markdown.\nsteps to add a blog article go to synced down blog_markdown. create new markdown file. cd blog_markdown/vitob-blog hugo new content blog/xxx.md edit xxx.md preview by running \u0026lsquo;$\u0026gt; hugo server -d\u0026rsquo; continue; steps to publish if satisfied with preview at http://localhost:1313/, changing \u0026lsquo;draft = true\u0026rsquo; to \u0026lsquo;draft = false\u0026rsquo; in xxx.md. then run \u0026lsquo;$\u0026gt; hugo\u0026rsquo; to generate contents under public subdirectory. copy or move public/* to synced down github.io repository and then push it to github. ","title":"My First Post"}]
+}
+
