@@ -5,7 +5,295 @@
     <description>Recent content in Posts on Vitob&#39;s Blog Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 01 Jun 2024 18:19:45 -0700</lastBuildDate><atom:link href="https://jinchenglee.github.io/posts/index.xml" rel="self" type="application/rss+xml" /><icon>https://jinchenglee.github.io/img/icon.svg</icon>
+    <lastBuildDate>Tue, 04 Jun 2024 17:46:09 -0700</lastBuildDate><atom:link href="https://jinchenglee.github.io/posts/index.xml" rel="self" type="application/rss+xml" /><icon>https://jinchenglee.github.io/img/icon.svg</icon>
+    
+    
+    <item>
+      <title>06042024_r200_cam_on_TX2_J120</title>
+      <link>https://jinchenglee.github.io/posts/06042024_r200_cam_on_tx2_j120/</link>
+      <pubDate>Tue, 04 Jun 2024 17:46:09 -0700</pubDate>
+      
+      <guid>https://jinchenglee.github.io/posts/06042024_r200_cam_on_tx2_j120/</guid>
+      <description><![CDATA[<h1 id="realsense-r200-on-jetson-tx2-with-auvidea-j120-carrier-board">RealSense R200 on Jetson TX2 with Auvidea J120 carrier board</h1>
+<ul>
+<li>
+<p>Patch Jetpack 4.3 (L4T R32.3.1) with Auvidea <a href="https://auvidea.eu/download/firmware/J120/J90-J120-J130_4_3.tar.bz2">J120 firmware v3.0</a> according to the README file in the tarball.
+&ndash; As a side note, I cannot get latest v4.0 firmware to work with Jetpack 4.6, both USB ports on J120 boards are not detecting any devices, even mouse/keyboard, so revert to v3.0 firmware.
+&ndash; Even with v3.0 firmware, there are some issues to live with: 1) only the top USB port is 3.0, the bottom USB port is only 2.0; 2) the FAN seems not working (cannot be detected by jtop).</p>
+</li>
+<li>
+<p>Flash the patched L4T to TX2 on J120 board</p>
+</li>
+<li>
+<p>Clone librealsense2.</p>
+</li>
+</ul>
+<pre tabindex="0"><code>git clone https://github.com/IntelRealSense/librealsense.git
+</code></pre><p>As of when this blog is being written, this commit is used:</p>
+<pre tabindex="0"><code>commit ff8a9fb213ec1227394de4060743b0ed61171985 (HEAD -&gt; master, origin/master, origin/HEAD)
+Merge: 4673a37d9 488c6ec3e
+Author: Eran &lt;librealsense.eran@gmail.com&gt;
+Date:   Sun Apr 21 12:01:57 2024 +0300
+
+    PR #12864: Merge v2.55.1 to master
+</code></pre><ul>
+<li>Run permissions script from librealsense2 tot directory.</li>
+</ul>
+<pre tabindex="0"><code># Need to install v4l-utils first
+sudo apt install v4l-utils
+./scripts/setup_udev_rules.sh
+</code></pre><ul>
+<li>Build and apply patched kernel modules.</li>
+</ul>
+<pre tabindex="0"><code>./scripts/patch-realsense-ubuntu-L4T.sh
+</code></pre><p>Check the log file of this script: <code>librealsense.patch.tx2.on.j120.log</code> inside this blog github directory.</p>
+<ul>
+<li>
+<p>Follow section <em>Run RealSense R200 example apps</em> of previous blog to R200 examples.</p>
+</li>
+<li>
+<p>Install SDK</p>
+</li>
+</ul>
+<pre tabindex="0"><code>sudo apt install nvidia-jetpack
+</code></pre><p><img src="tx2-on-j200-jtop.png" alt="jtop screenshot" title="jtop running on TX2 with J120 carrier board"></p>
+]]></description>
+      
+    </item>
+    
+    
+    
+    <item>
+      <title>06032024_r200_cam_on_TX2</title>
+      <link>https://jinchenglee.github.io/posts/06032024_r200_cam_on_tx2/</link>
+      <pubDate>Tue, 04 Jun 2024 17:44:06 -0700</pubDate>
+      
+      <guid>https://jinchenglee.github.io/posts/06032024_r200_cam_on_tx2/</guid>
+      <description><![CDATA[<h1 id="realsense-r200-camera-on-jetson-tx2-with-l4t-r3231">RealSense R200 Camera on Jetson TX2 with L4T R32.3.1</h1>
+<p>Both RealSense R200 camera and NVidia Jetson TX2 are considered legacy hardwares today (when this post is written at June, 2024) and are replaced by their newly released siblings that are more capable and fancier. However, I happen to have both and it is a pitty to have them collect dust on shelf, thus the effort.</p>
+<h2 id="jetpack-and-l4t-versions">Jetpack and L4T versions</h2>
+<ul>
+<li>For some practical reason (I only got Auvidea J120 TX2 carrier board patching <a href="https://auvidea.eu/download/firmware/J120/J90-J120-J130_4_3.tar.bz2">firmware v3.0</a>, released on Feb 2020, working with JP4.3; the latest J120 v4.0 firmware released on Dec 2021 doesn&rsquo;t work for me on JP4.6/L4T32.6.1), I chose <a href="https://developer.nvidia.com/jetpack-33-archive">Jetpack 4.3</a> and <a href="https://developer.nvidia.com/l4t-3231-archive">L4T32.3.1</a> as the starting point on Jetson TX2.</li>
+<li>This post talks about getting everything work on Jetson TX2 development kit, <strong>not</strong> on J120 carrier board though.</li>
+<li>As a note for completeness, Jetson TX2 latest SDK is <a href="https://developer.nvidia.com/jetpack-sdk-464">Jetpack 4.6.4</a>, which couples with <a href="https://developer.nvidia.com/embedded/linux-tegra-r3274">L4T 32.7.4</a>.</li>
+</ul>
+<h2 id="realsense-r200-sdklibrary">RealSense R200 SDK/Library</h2>
+<p>The latest SDK/library that supports the legacy RealSense R200 camera is <a href="https://github.com/IntelRealSense/librealsense/tree/v1.12.4">v1.12.4</a>, which seems a final release following the earlier said &ldquo;final&rdquo; release <a href="https://github.com/IntelRealSense/librealsense/tree/v1.12.1">v1.12.1</a>.</p>
+<p>These blogs are good references:</p>
+<ul>
+<li>Running the RealSense R200 camera with librealsense and pyrealsense legacy libraries: <a href="https://idorobotics.com/2020/01/02/running-the-realsense-r200-camera-with-librealsense-and-pyrealsense-legacy-libraries/">link</a>.</li>
+<li>Intel librealsense installation <a href="https://github.com/IntelRealSense/librealsense/blob/development/doc/installation.md#install-librealsense2">doc</a>, which was written for librealsense v2.0, however, this section works for v1.12.x which supports realsense R200.</li>
+</ul>
+<h2 id="patch-on-jetson-tx2-directly">Patch on Jetson TX2 directly</h2>
+<p>(Not repeat all the details here, only for guidance, mileage varies if followed exactly below&hellip;)</p>
+<p>On a freshly flashed TX2, follow the guidance listed on <a href="https://github.com/IntelRealSense/librealsense/blob/development/doc/installation.md#install-librealsense2">Intel librealsense installation</a>:</p>
+<ul>
+<li>Clone librealsense2.</li>
+</ul>
+<pre tabindex="0"><code>git clone https://github.com/IntelRealSense/librealsense.git
+</code></pre><p>As of when this blog is being written, this commit is used:</p>
+<pre tabindex="0"><code>commit ff8a9fb213ec1227394de4060743b0ed61171985 (HEAD -&gt; master, origin/master, origin/HEAD)
+Merge: 4673a37d9 488c6ec3e
+Author: Eran &lt;librealsense.eran@gmail.com&gt;
+Date:   Sun Apr 21 12:01:57 2024 +0300
+
+    PR #12864: Merge v2.55.1 to master
+</code></pre><ul>
+<li>Run permissions script from librealsense2 tot directory.</li>
+</ul>
+<pre tabindex="0"><code>./scripts/setup_udev_rules.sh
+</code></pre><ul>
+<li>Build and apply patched kernel modules.</li>
+</ul>
+<pre tabindex="0"><code>./scripts/patch-realsense-ubuntu-L4T.sh
+</code></pre><h2 id="build-linux-kernel-from-source-on-x86-host">Build Linux kernel from source on x86 host</h2>
+<p>The patching process can be done on Jetson TX2 itself (maybe simpler in that way as well) after flashing it with NVidia SDKManager with the right version of L4T mentioned above. However, since I&rsquo;m considering deploy Yocto onto the same platform as a later step, it is better to start with x86 host patching.</p>
+<p>Good advices about building kernel from source on x86 host for Jetson platform:</p>
+<ul>
+<li>Auvidea J120 and Intel RealSense D435: <a href="https://forums.developer.nvidia.com/t/auvidea-j120-and-intel-realsense-d435/64999/8">link</a></li>
+<li>TX2i WiFi support (the title is irrelevant but the message pointed to is good reference about general kernel compile from source): <a href="https://forums.developer.nvidia.com/t/tx2i-wifi-support/63839/2">link</a></li>
+</ul>
+<p>General L4T Kernel Customization <a href="https://docs.nvidia.com/jetson/archives/l4t-archived/l4t-3231/index.html?_gl=1*18jb7bx*_gcl_au*OTUwNjIzMDg4LjE3MTYyMjg0MTU.#page/Tegra%2520Linux%2520Driver%2520Package%2520Development%2520Guide%2Fkernel_custom.html%23wwpID0E02C0HA">reference</a> from official documentation of L4T.</p>
+<h3 id="prerequesites">Prerequesites</h3>
+<ul>
+<li>Since we are building for a legacy system, Ubuntu 18.04 LTS is needed on x86.</li>
+</ul>
+<pre tabindex="0"><code>$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Ubuntu
+Description:	Ubuntu 18.04.6 LTS
+Release:	18.04
+Codename:	bionic
+</code></pre><ul>
+<li>
+<p>A <code>.config</code> is preferred to be copied and saved from a freshly flashed TX2 to be used in later source compilation. How and why <a href="https://forums.developer.nvidia.com/t/tx2i-wifi-support/63839/2">here</a>.</p>
+</li>
+<li>
+<p>Install cross-compile toolchain, following <a href="https://docs.nvidia.com/jetson/archives/l4t-archived/l4t-3231/index.html#page/Tegra%20Linux%20Driver%20Package%20Development%20Guide/xavier_toolchain.html">Jetson Linux Driver Package Toolchain</a> to install necessary tools.</p>
+</li>
+<li>
+<p>Sync down the earlier mentioned librealsense git repository as mentioned in <a href="#patch-on-jetson-tx2">Patch on Jetson TX2</a>.</p>
+</li>
+</ul>
+<h3 id="compile">Compile</h3>
+<ul>
+<li>Get L4T source code by using source_sync.sh, which can be downloaded from <code>~/nvidia/nvidia_sdk/JetPack_x.y.z_Linux_JETSON_TX2_TARGETS/Linux_for_Tegra/source_sync.sh</code> if you ever have flashed the system using SDKManager (you should have). Using this official script is easier to make sure downloaded sources are complete with matching versions of each subdirectories etc.</li>
+</ul>
+<pre tabindex="0"><code>mkdir -p ~/tx2_source_build/r32-3-1_Release_v1.0
+cd ~/tx2_source_build/r32-3-1_Release_v1.0
+./source_sync.sh -k tegra-l4t-r32.3.1
+</code></pre><p>After successfully ran the scipt, you should see a <code>sources</code> directory:</p>
+<pre tabindex="0"><code>$ tree -L 2 ./sources
+./sources
+├── hardware
+│   └── nvidia
+└── kernel
+    ├── kernel-4.9
+    ├── nvgpu
+    └── nvidia
+</code></pre><ul>
+<li>Prepare and compile the kernel</li>
+</ul>
+<pre tabindex="0"><code>mkdir build
+mkdir modules
+export TEGRA_KERNEL_OUT=~/tx2_source_build/r32-3-1_Release_v1.0/build
+export TEGRA_MODULES_OUT=~/tx2_source_build/r32-3-1_Release_v1.0/modules
+export SRC=~/tx2_source_build/r32-3-1_Release_v1.0/sources/kernel/kernel-4.9/
+export ARCH=arm64
+export CROSS_COMPILE=~/src_install/l4t-gcc/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-
+</code></pre><p>Now overwrite the .config with the reserved/saved <code>.config</code> file into TEGRA_KERNEL_OUT (again, see <a href="https://forums.developer.nvidia.com/t/tx2i-wifi-support/63839/2">this post</a> about how and why to get the .config file from freshly flashed system instead of config it live); patch the kernels; then cross-compile.
+This process is refering the Intel librealsense script <a href="https://github.com/IntelRealSense/librealsense/blob/master/scripts/patch-realsense-ubuntu-L4T.sh">patch-realsense-ubuntu-L4T.sh</a>.</p>
+<pre tabindex="0"><code>cd $SRC
+
+# Apply the librealsense patches
+cp -r ~/tx2_source_build/librealsense/scripts/Tegra/LRS_Patches .
+cp ~/tx2_source_build/config.gz.backup/tx2_devkit.r32.3.1.config ./.config
+
+echo -e &#34;\e[32mUpdate the kernel tree to support HID IMU sensors\e[0m&#34;
+sed -i &#39;/CONFIG_HID_SENSOR_ACCEL_3D/c\CONFIG_HID_SENSOR_ACCEL_3D=m&#39; .config
+sed -i &#39;/CONFIG_HID_SENSOR_GYRO_3D/c\CONFIG_HID_SENSOR_GYRO_3D=m&#39; .config
+sed -i &#39;/CONFIG_HID_SENSOR_IIO_COMMON/c\CONFIG_HID_SENSOR_IIO_COMMON=m\nCONFIG_HID_SENSOR_IIO_TRIGGER=m&#39; .config
+
+
+echo -e &#34;\e[32mApply Librealsense Kernel Patches\e[0m&#34;
+
+patch -p1 &lt; ./LRS_Patches/02-realsense-metadata-L4T-4.4.patch
+patch -p1 &lt; ./LRS_Patches/03-realsense-hid-L4T-4.9.patch
+patch -p1 &lt; ./LRS_Patches/05-realsense-powerlinefrequency-control-fix.patch
+
+# The original 01-realsense-camera-formats-L4T-4.4.patch caused problem in patched 
+# v4l2-ioctl.c, so I modified a local version, which can be found in this blog directory on github.
+#patch -p1 &lt; ./LRS_Patches/01-realsense-camera-formats-L4T-4.4.patch
+cp ~/tx2_source_build/01-realsense-camera-formats-L4T-4.4.mod.patch ./LRS_Patches
+patch -p1 &lt; ./LRS_Patches/01-realsense-camera-formats-L4T-4.4.mod.patch
+
+
+# Overwrite the .config files
+cp ./.config  $TEGRA_KERNEL_OUT/.config
+mv ./.config  $TEGRA_MODULES_OUT/.config
+
+# Now compile
+make ARCH=arm64 O=$TEGRA_KERNEL_OUT -j11 Image
+make ARCH=arm64 O=$TEGRA_MODULES_OUT -j11 modules
+# Build everything
+make ARCH=arm64 O=$TEGRA_MODULES_OUT -j11
+
+## More specifically, if incremental building on an earlier unpatched source tree
+#make ARCH=arm64  M=drivers/media/usb/uvc O=$TEGRA_MODULES_OUT -j11 modules
+#make ARCH=arm64  M=drivers/media/v4l2-core O=$TEGRA_MODULES_OUT -j11 modules
+#make ARCH=arm64  M=drivers/iio  O=$TEGRA_MODULES_OUT -j11 modules
+
+## These are the modified modules
+export TEGRA_TAG=tegra-l4t-r32.3.1
+#pushd $TEGRA_MODULES_OUT
+#echo -e &#34;\e[32mCopying the patched modules to (~/) \e[0m&#34;
+#cp drivers/media/usb/uvc/uvcvideo.ko ~/${TEGRA_TAG}-uvcvideo.ko
+#cp drivers/media/v4l2-core/videobuf-vmalloc.ko ~/${TEGRA_TAG}-videobuf-vmalloc.ko
+#cp drivers/media/v4l2-core/videobuf-core.ko ~/${TEGRA_TAG}-videobuf-core.ko
+#cp drivers/iio/common/hid-sensors/hid-sensor-iio-common.ko ~/${TEGRA_TAG}-hid-sensor-iio-common.ko
+#cp drivers/iio/common/hid-sensors/hid-sensor-trigger.ko ~/${TEGRA_TAG}-hid-sensor-trigger.ko
+#cp drivers/iio/accel/hid-sensor-accel-3d.ko ~/${TEGRA_TAG}-hid-sensor-accel-3d.ko
+#cp drivers/iio/gyro/hid-sensor-gyro-3d.ko ~/${TEGRA_TAG}-hid-sensor-gyro-3d.ko
+#popd
+
+# Install built modules to some directory
+mkdir ~/tx2_source_build/r32-3-1_Release_v1.0/modules_install
+sudo make ARCH=arm64 O=$TEGRA_KERNEL_OUT modules_install INSTALL_MOD_PATH=~/tx2_source_build/r32-3-1_Release_v1.0/modules_install/
+</code></pre><h3 id="install-built-kernelmodules-to-system">Install built kernel/modules to system</h3>
+<p>Copy <code>$TEGRA_KERNEL_OUT/arch/arm64/boot/Image</code> and <code>modules_install/*</code> respectively to <code>tx2_system:/boot/Image</code> and <code>/lib/modules/</code>, and reboot the system will use our newly built kernel/modules etc.</p>
+<p>The above way will overwrite original system kernel/modules, however, it would be better to back up original kernel Image to Image.backup, and then edit /boot/extlinux/extlinux.cfg:</p>
+<pre tabindex="0"><code>TIMEOUT 30
+DEFAULT primary
+
+MENU TITLE L4T boot options
+
+LABEL primary
+      MENU LABEL primary kernel
+      LINUX /boot/Image.r200_patched
+      INITRD /boot/initrd
+      APPEND ${cbootargs} quiet
+#      APPEND ${cbootargs} root=/dev/mmcblk0p1 rw rootwait rootfstype=ext4
+
+# When testing a custom kernel, it is recommended that you create a backup of
+# the original kernel and add a new entry to this file so that the device can
+# fallback to the original kernel. To do this:
+#
+# 1, Make a backup of the original kernel
+#      sudo cp /boot/Image /boot/Image.backup
+#
+# 2, Copy your custom kernel into /boot/Image
+#
+# 3, Uncomment below menu setting lines for the original kernel
+#
+# 4, Reboot
+
+LABEL backup
+   MENU LABEL backup kernel
+   LINUX /boot/Image.backup
+   INITRD /boot/initrd
+   APPEND ${cbootargs} quiet
+</code></pre><h2 id="run-realsense-r200-example-apps">Run RealSense R200 example apps</h2>
+<p><em><strong>On the patched Jetson TX2 system</strong></em>:</p>
+<ul>
+<li>Get the The latest SDK/library that supports the legacy RealSense R200 camera is <a href="https://github.com/IntelRealSense/librealsense/tree/v1.12.4">v1.12.4</a></li>
+</ul>
+<pre tabindex="0"><code>wget https://github.com/IntelRealSense/librealsense/archive/refs/tags/v1.12.4.tar.gz
+tar xvfz ./v1.12.4.tar.gz
+</code></pre><ul>
+<li>Build examples</li>
+</ul>
+<pre tabindex="0"><code>cd librealsense-1.12.4
+mkdir build &amp;&amp; cd build
+cmake .. -DBUILD_EXAMPLES:BOOL=true
+make -j4
+</code></pre><p>You will find these compiled successfully:</p>
+<pre tabindex="0"><code>nvidia@tx2-r32:~/experiment/librealsense-1.12.4/build$ ls examples/
+CMakeFiles           cpp-callback    cpp-config-ui          cpp-motion-module  cpp-restart 
+cpp-tutorial-2-streams     c-tutorial-2-streams cmake_install.cmake  cpp-callback-2 
+cpp-enumerate-devices  cpp-multicam       cpp-stride            cpp-tutorial-3-pointcloud 
+c-tutorial-3-pointcloud cpp-alignimages      cpp-capture    cpp-headless cpp-pointcloud 
+cpp-tutorial-1-depth  c-tutorial-1-depth         Makefile
+
+nvidia@tx2-r32:~/experiment/librealsense-1.12.4/build$ ls -al *.so*
+lrwxrwxrwx 1 nvidia nvidia       17 Jun  3 14:46 librealsense.so -&gt; librealsense.so.1
+lrwxrwxrwx 1 nvidia nvidia       22 Jun  3 14:46 librealsense.so.1 -&gt; librealsense.so.1.12.4
+-rwxrwxr-x 1 nvidia nvidia 11547184 Jun  3 14:46 librealsense.so.1.12.4
+
+nvidia@tx2-r32:~/experiment/librealsense-1.12.4/build$ ./examples/cpp-tutorial-2-streams 
+There are 1 connected RealSense devices.
+
+Using device 0, an Intel RealSense R200
+    Serial number: xxxxxxxx
+    Firmware version: 1.0.72.06
+</code></pre><p><img src="r200-example-run-screenshot.png" alt="R200 camera running tutorial" title="r200 running"></p>
+<ul>
+<li>Run on-board CSI camera</li>
+</ul>
+<pre tabindex="0"><code>gst-launch-1.0 nvarguscamerasrc ! nvvidconv ! xvimagesink
+</code></pre>]]></description>
+      
+    </item>
+    
     
     
     <item>

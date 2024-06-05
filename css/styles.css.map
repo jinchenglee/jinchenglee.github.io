@@ -1,7 +1,7 @@
 {
 	"version": 3,
 	"file": "styles.css",
-	"sourceRoot": "/home/vitob/git_repo/blog_markdown/vitob-blog",
+	"sourceRoot": "/Users/jinchengli/git_repo/blog_markdown/vitob-blog",
 	"sources": [
 		"themes/hugo-ficurinia/assets/scss/style.scss"
 	],
