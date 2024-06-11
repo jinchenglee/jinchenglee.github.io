@@ -168,6 +168,33 @@
 <article class="card postlistitem">
     <div>
         <h2>
+            <a href="https://jinchenglee.github.io/posts/06102024_yocto_on_tx2/">Yocto on TX2 with Jetpack4.3</a>
+        </h2>
+        <p class="date">
+            <span title='Date'> </span>
+    2024-06-10
+
+
+        </p>
+        
+        
+            <div class="articlePreview">
+                <p>
+                    
+                        #Yocto on TX2 with Jetpack4.3
+This blog tries to build TX2 image with industry-default flow for embedded system &ndash; the Yocto project, for ancient Jetson TX2 with Jetpack 4.3 (L4T R32.3.1).
+Default meta-tegra build Sync down meta-tegra with right branch dunfell-l4t-r32.3.1. Also, please check L4T R32.3.1 Notes. cd ~ &amp;&amp; mkdir yocto-tx2-jp43 &amp;&amp; cd yocto-tx2-jp43 git clone https://github.com/OE4T/meta-tegra.git cd meta-tegra git branch -a git checkout dunfell-l4t-r32.3.1 Sync down poky with right branch dunfell.
+                    
+                </p>
+                <p><a href="https://jinchenglee.github.io/posts/06102024_yocto_on_tx2/">Continue reading </a></p>
+            </div>
+        
+    </div>
+    <hr />
+</article>
+<article class="card postlistitem">
+    <div>
+        <h2>
             <a href="https://jinchenglee.github.io/posts/06042024_r200_cam_on_tx2_j120/">06042024_r200_cam_on_TX2_J120</a>
         </h2>
         <p class="date">
@@ -234,7 +261,7 @@ Jetpack and L4T versions For some practical reason (I only got Auvidea J120 TX2 
                     
                         This is my first blog using Hugo generated contents backed by github.io.
 It records how to add new blog article using markdown.
-Steps to add a blog article Go to synced down blog_markdown. Create new markdown file. cd blog_markdown/vitob-blog hugo new content blog/xxx.md Edit xxx.md Preview by running &lsquo;$&gt; hugo server -D&rsquo; Continue; Steps to publish If satisfied with preview at http://localhost:1313/, changing &lsquo;draft = true&rsquo; to &lsquo;draft = false&rsquo; in xxx.
+Steps to add a blog article Go to synced down blog_markdown. Create new markdown file. cd blog_markdown/vitob-blog hugo new content posts/&lt;dir name&gt;/index.md Edit xxx.md Preview by running &lsquo;$&gt; hugo server -D&rsquo; Continue; Steps to publish If satisfied with preview at http://localhost:1313/, changing &lsquo;draft = true&rsquo; to &lsquo;draft = false&rsquo; in xxx.
                     
                 </p>
                 <p><a href="https://jinchenglee.github.io/posts/my-first-post/">Continue reading </a></p>

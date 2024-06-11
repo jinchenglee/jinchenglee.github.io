@@ -325,7 +325,7 @@ export TEGRA_TAG=tegra-l4t-r32.3.1
 
 # Install built modules to some directory
 mkdir ~/tx2_source_build/r32-3-1_Release_v1.0/modules_install
-sudo make ARCH=arm64 O=$TEGRA_KERNEL_OUT modules_install INSTALL_MOD_PATH=~/tx2_source_build/r32-3-1_Release_v1.0/modules_install/
+sudo make ARCH=arm64 O=$TEGRA_MODULES_OUT modules_install INSTALL_MOD_PATH=~/tx2_source_build/r32-3-1_Release_v1.0/modules_install/
 </code></pre><h3 id="install-built-kernelmodules-to-system">Install built kernel/modules to system</h3>
 <p>Copy <code>$TEGRA_KERNEL_OUT/arch/arm64/boot/Image</code> and <code>modules_install/*</code> respectively to <code>tx2_system:/boot/Image</code> and <code>/lib/modules/</code>, and reboot the system will use our newly built kernel/modules etc.</p>
 <p>The above way will overwrite original system kernel/modules, however, it would be better to back up original kernel Image to Image.backup, and then edit /boot/extlinux/extlinux.cfg:</p>
