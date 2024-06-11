@@ -38,8 +38,7 @@
 
     
     
-        <meta name="description" content="a on Jetson TX2 with L4T R32.3.1 Both RealSense R200 camera and NVidia Jetson TX2 are considered legacy hardwares today (when this post is written at June, 2024) and are replaced by their newly released siblings that are more capable and fancier. However, I happen to have both and it is a pitty to have them collect dust on shelf, thus the effort.
-Jetpack and L4T versions For some practical reason (I only got Auvidea J120 TX2 carrier board patching firmware v3." />
+        <meta name="description" content="a on Jetson TX2 with L4T R32.3.1 Jetpack and L4T versions RealSense R200 SDK/Library Patch on Jetson TX2 directly Build Linux kernel from source on x86 host Prerequesites Compile Install built kernel/modules to system Run RealSense R200 example apps Both RealSense R200 camera and NVidia Jetson TX2 are considered legacy hardwares today (when this post is written at June, 2024) and are replaced by their newly released siblings that are more capable and fancier." />
     
 
 <meta property="og:site_name"
@@ -60,7 +59,7 @@ Jetpack and L4T versions For some practical reason (I only got Auvidea J120 TX2 
     <meta property="og:image"
         content="https://jinchenglee.github.io/img/icon.svg" />
     
-        <meta property="og:description" content="RealSense R200 Camera on Jetson TX2 with L4T R32.3.1 Both RealSense R200 camera and NVidia Jetson TX2 are considered legacy hardwares today (when this post is w" />
+        <meta property="og:description" content="RealSense R200 Camera on Jetson TX2 with L4T R32.3.1 Jetpack and L4T versions RealSense R200 SDK/Library Patch on Jetson TX2 directly Build Linux kernel from so" />
     
 
 <meta name="twitter:card" content="summary_large_image" />
@@ -77,7 +76,7 @@ Jetpack and L4T versions For some practical reason (I only got Auvidea J120 TX2 
     <meta name="twitter:image"
         content="https://jinchenglee.github.io/img/icon.svg" />
     
-        <meta name="twitter:description" content="RealSense R200 Camera on Jetson TX2 with L4T R32.3.1 Both RealSense R200 camera and NVidia Jetson TX2 are considered legacy hardwares today (when this post is w" />
+        <meta name="twitter:description" content="RealSense R200 Camera on Jetson TX2 with L4T R32.3.1 Jetpack and L4T versions RealSense R200 SDK/Library Patch on Jetson TX2 directly Build Linux kernel from so" />
     
 
 <link rel="manifest" href="/manifest/index.json" />
@@ -177,6 +176,22 @@ Jetpack and L4T versions For some practical reason (I only got Auvidea J120 TX2 
     
     
     <div><h1 id="realsense-r200-camera-on-jetson-tx2-with-l4t-r3231">RealSense R200 Camera on Jetson TX2 with L4T R32.3.1</h1>
+<nav id="TableOfContents">
+  <ol>
+    <li><a href="#jetpack-and-l4t-versions">Jetpack and L4T versions</a></li>
+    <li><a href="#realsense-r200-sdklibrary">RealSense R200 SDK/Library</a></li>
+    <li><a href="#patch-on-jetson-tx2-directly">Patch on Jetson TX2 directly</a></li>
+    <li><a href="#build-linux-kernel-from-source-on-x86-host">Build Linux kernel from source on x86 host</a>
+      <ol>
+        <li><a href="#prerequesites">Prerequesites</a></li>
+        <li><a href="#compile">Compile</a></li>
+        <li><a href="#install-built-kernelmodules-to-system">Install built kernel/modules to system</a></li>
+      </ol>
+    </li>
+    <li><a href="#run-realsense-r200-example-apps">Run RealSense R200 example apps</a></li>
+  </ol>
+</nav>
+
 <p>Both RealSense R200 camera and NVidia Jetson TX2 are considered legacy hardwares today (when this post is written at June, 2024) and are replaced by their newly released siblings that are more capable and fancier. However, I happen to have both and it is a pitty to have them collect dust on shelf, thus the effort.</p>
 <h2 id="jetpack-and-l4t-versions">Jetpack and L4T versions</h2>
 <ul>

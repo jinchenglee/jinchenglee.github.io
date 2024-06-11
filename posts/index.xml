@@ -15,6 +15,25 @@
       
       <guid>https://jinchenglee.github.io/posts/06102024_yocto_on_tx2/</guid>
       <description><![CDATA[<p>#Yocto on TX2 with Jetpack4.3</p>
+<nav id="TableOfContents">
+  <ol>
+    <li><a href="#default-meta-tegra-build">Default meta-tegra build</a>
+      <ol>
+        <li><a href="#build-core-image-minimal">Build core-image-minimal.</a></li>
+        <li><a href="#build-core-image-sato-dev">Build core-image-sato-dev</a></li>
+      </ol>
+    </li>
+    <li><a href="#patch-kernel-with-preempt-rt">Patch kernel with PREEMPT-RT</a>
+      <ol>
+        <li><a href="#getting-ready-for-kernel-dev-using-devtool-according-to-yocto-doc9httpsdocsyoctoprojectorgkernel-devcommonhtmlgetting-ready-to-develop-using-devtool">Getting Ready for kernel-dev Using devtool according to <a href="9https://docs.yoctoproject.org/kernel-dev/common.html#getting-ready-to-develop-using-devtool">Yocto Doc</a>.</a></li>
+        <li><a href="#using-devtool-to-patch-the-kernel">Using devtool to Patch the Kernel</a></li>
+        <li><a href="#save-the-patch-work-for-future-use">Save the patch work for future use</a></li>
+      </ol>
+    </li>
+    <li><a href="#yocto-build-with-rt-patch-from-scratch">Yocto build with RT patch from scratch</a></li>
+  </ol>
+</nav>
+
 <p>This blog tries to build TX2 image with industry-default flow for embedded system &ndash; the Yocto project, for ancient Jetson TX2 with Jetpack 4.3 (L4T R32.3.1).</p>
 <h2 id="default-meta-tegra-build">Default meta-tegra build</h2>
 <ul>
@@ -385,6 +404,8 @@ bitbake core-image-sato-dev
       
       <guid>https://jinchenglee.github.io/posts/06042024_r200_cam_on_tx2_j120/</guid>
       <description><![CDATA[<h1 id="realsense-r200-on-jetson-tx2-with-auvidea-j120-carrier-board">RealSense R200 on Jetson TX2 with Auvidea J120 carrier board</h1>
+<nav id="TableOfContents"></nav>
+
 <ul>
 <li>
 <p>Patch Jetpack 4.3 (L4T R32.3.1) with Auvidea <a href="https://auvidea.eu/download/firmware/J120/J90-J120-J130_4_3.tar.bz2">J120 firmware v3.0</a> according to the README file in the tarball.
@@ -440,6 +461,22 @@ sudo apt install v4l-utils
       
       <guid>https://jinchenglee.github.io/posts/06032024_r200_cam_on_tx2/</guid>
       <description><![CDATA[<h1 id="realsense-r200-camera-on-jetson-tx2-with-l4t-r3231">RealSense R200 Camera on Jetson TX2 with L4T R32.3.1</h1>
+<nav id="TableOfContents">
+  <ol>
+    <li><a href="#jetpack-and-l4t-versions">Jetpack and L4T versions</a></li>
+    <li><a href="#realsense-r200-sdklibrary">RealSense R200 SDK/Library</a></li>
+    <li><a href="#patch-on-jetson-tx2-directly">Patch on Jetson TX2 directly</a></li>
+    <li><a href="#build-linux-kernel-from-source-on-x86-host">Build Linux kernel from source on x86 host</a>
+      <ol>
+        <li><a href="#prerequesites">Prerequesites</a></li>
+        <li><a href="#compile">Compile</a></li>
+        <li><a href="#install-built-kernelmodules-to-system">Install built kernel/modules to system</a></li>
+      </ol>
+    </li>
+    <li><a href="#run-realsense-r200-example-apps">Run RealSense R200 example apps</a></li>
+  </ol>
+</nav>
+
 <p>Both RealSense R200 camera and NVidia Jetson TX2 are considered legacy hardwares today (when this post is written at June, 2024) and are replaced by their newly released siblings that are more capable and fancier. However, I happen to have both and it is a pitty to have them collect dust on shelf, thus the effort.</p>
 <h2 id="jetpack-and-l4t-versions">Jetpack and L4T versions</h2>
 <ul>
