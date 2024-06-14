@@ -189,6 +189,33 @@
 <article class="card postlistitem">
     <div>
         <h2>
+            <a href="https://jinchenglee.github.io/posts/06132024_yocto_patch_l4t.r32.3.1_tx2/">Yocto kernel patch L4T R32.3.1 on tx2</a>
+        </h2>
+        <p class="date">
+            <span title='Date'> </span>
+    2024-06-13
+
+
+        </p>
+        
+        
+            <div class="articlePreview">
+                <p>
+                    
+                        Patch to fix *-sdk build failures When a unmodified yocto build environment is setup (see previous blog about Yocto on TX2, &ldquo;default meta-tegra build&rdquo;), trying to build *-sdk (e.g. core-image-sato-sdk) will fail although *-dev builds are fine.
+compilation: srcline.c The failure is related to perf-1.0 tool that Linux kernel requires. This first error comes from kernel compilation of tools/perf/util/srcline.c.
+/build/tmp/work/intel_core2_32-poky-linux/perf/1.0-r9/perf-1.0/perf-in.o: in function `find_address_in_section&#39;: /usr/src/debug/perf/1.0-r9/perf-1.0/tools/perf/util/srcline.c:200: undefined reference to `bfd_get_section_flags&#39; A search online result shows hint how to fix the source code.
+                    
+                </p>
+                <p><a href="https://jinchenglee.github.io/posts/06132024_yocto_patch_l4t.r32.3.1_tx2/">Continue reading </a></p>
+            </div>
+        
+    </div>
+    <hr />
+</article>
+<article class="card postlistitem">
+    <div>
+        <h2>
             <a href="https://jinchenglee.github.io/posts/06102024_yocto_on_tx2/">Yocto on TX2 with Jetpack4.3</a>
         </h2>
         <p class="date">

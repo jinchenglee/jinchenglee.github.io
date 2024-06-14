@@ -9,6 +9,227 @@
     
     
     <item>
+      <title>Yocto kernel patch L4T R32.3.1 on tx2</title>
+      <link>https://jinchenglee.github.io/posts/06132024_yocto_patch_l4t.r32.3.1_tx2/</link>
+      <pubDate>Thu, 13 Jun 2024 21:42:50 -0700</pubDate>
+      
+      <guid>https://jinchenglee.github.io/posts/06132024_yocto_patch_l4t.r32.3.1_tx2/</guid>
+      <description><![CDATA[<h2 id="patch-to-fix--sdk-build-failures">Patch to fix <code>*-sdk</code> build failures</h2>
+<p>When a unmodified yocto build environment is setup (see previous blog about Yocto on TX2, &ldquo;default meta-tegra build&rdquo;), trying to build <code>*-sdk</code> (e.g. <code>core-image-sato-sdk</code>) will fail although <code>*-dev</code> builds are fine.</p>
+<h3 id="compilation-srclinec">compilation: srcline.c</h3>
+<p>The failure is related to <code>perf-1.0</code> tool that Linux kernel requires. This first error comes from kernel compilation of <code>tools/perf/util/srcline.c</code>.</p>
+<pre tabindex="0"><code>/build/tmp/work/intel_core2_32-poky-linux/perf/1.0-r9/perf-1.0/perf-in.o: in function `find_address_in_section&#39;:
+/usr/src/debug/perf/1.0-r9/perf-1.0/tools/perf/util/srcline.c:200: undefined reference to `bfd_get_section_flags&#39;
+</code></pre><p>A search online <a href="https://lists.yoctoproject.org/g/meta-intel/topic/patch_2_2_linux_intel/71501209">result</a> shows hint how to fix the source code.</p>
+<h3 id="installation-setuppy">installation: setup.py</h3>
+<p>Then the failure comes from (it seems) <code>PREFERRED_VERSION_python3 = &quot;3.8%&quot;</code> vs. <code>tools/perf/util/setup.py</code> of <code>perf-1.0</code> expects python2.x. After searching around, I ended up using <a href="https://docs.python.org/3/library/2to3.html">2to3 - Automated Python 2 to 3 code translation</a> to have converted the setup.py which resulted the error.</p>
+<h3 id="installation-pythonc">installation: python.c</h3>
+<p>The installation phase of <code>perf-1.0</code> hit yet another failure, which seems trying to expose the built perf library to python, but again, it expects python 2.x. The error is related to Python C-API changes on PyObject_HEAD macro used in <code>tools/perf/util/python.c</code>. Several lines need to be changes similarly as below:</p>
+<pre tabindex="0"><code>@@ -513,7 +513,9 @@ static int pyrf_cpu_map__init(struct pyrf_cpu_map *pcpus,
+ static void pyrf_cpu_map__delete(struct pyrf_cpu_map *pcpus)
+ {
+        cpu_map__put(pcpus-&gt;cpus);
+-       pcpus-&gt;ob_type-&gt;tp_free((PyObject*)pcpus);
++       // Python2 vs. 3 incompatibility
++       //pcpus-&gt;ob_type-&gt;tp_free((PyObject*)pcpus);
++       Py_TYPE(pcpus)-&gt;tp_free((PyObject*)pcpus);
+ }
+</code></pre><h3 id="using-devtool-to-patch-the-kernel">Using devtool to Patch the Kernel</h3>
+<p>Yocto provided easty-to-follow <a href="https://docs.yoctoproject.org/kernel-dev/common.html#using-devtool-to-patch-the-kernel">procedure</a> to patch the kernel by using the devtool tool. It will fetch/sync the specifric kernel version to a local workspace. After local modification/try build/verification, it will package the changes as a recipe automatically. Really convenient.</p>
+<p>Notice: unlike what mentioned in the yocto document <code>linux-yocto</code>, for our target tx2, we should replace that with <code>linux-tegra</code>.</p>
+<p>The auto-prepared recipe looks like this:</p>
+<pre tabindex="0"><code>./meta-example/
+├── conf
+│   └── layer.conf
+├── COPYING.MIT
+├── README
+└── recipes-kernel
+    └── linux
+        ├── linux-tegra
+        │   └── 0001-Workaround-build-installation-issues-related-to-perf.patch
+        └── linux-tegra_4.9.bbappend
+</code></pre><h3 id="rebuild-and-flash">Rebuild and flash</h3>
+<p>Rebuild the image shows suceess.</p>
+<pre tabindex="0"><code>@ubuntu18:~/yocto-tegra/build$ bitbake core-image-sato-sdk 
+Parsing recipes: 100% |#################################################################################################| Time: 0:00:12
+Parsing of 875 .bb files complete (0 cached, 875 parsed). 1486 targets, 76 skipped, 0 masked, 0 errors.
+NOTE: Resolving any missing task queue dependencies
+
+Build Configuration:
+BB_VERSION           = &#34;1.46.0&#34;
+BUILD_SYS            = &#34;x86_64-linux&#34;
+NATIVELSBSTRING      = &#34;ubuntu-18.04&#34;
+TARGET_SYS           = &#34;aarch64-poky-linux&#34;
+MACHINE              = &#34;jetson-tx2&#34;
+DISTRO               = &#34;poky&#34;
+DISTRO_VERSION       = &#34;3.1.33&#34;
+TUNE_FEATURES        = &#34;aarch64 armv8a crc&#34;
+TARGET_FPU           = &#34;&#34;
+meta-tegra           = &#34;dunfell-l4t-r32.3.1:12ca32302b4d23045d1dc19102d0c21670052f7d&#34;
+meta                 
+meta-poky            
+meta-yocto-bsp       = &#34;dunfell:63d05fc061006bf1a88630d6d91cdc76ea33fbf2&#34;
+meta-example        = &#34;&lt;unknown&gt;:&lt;unknown&gt;&#34;
+
+Initialising tasks: 100% |##############################################################################################| Time: 0:00:04
+Sstate summary: Wanted 3202 Found 3158 Missed 44 Current 0 (98% match, 0% complete)
+NOTE: Executing Tasks
+NOTE: Tasks Summary: Attempted 7674 tasks of which 7013 didn&#39;t need to be rerun and all succeeded.
+</code></pre><p>Flash with command <code>sudo ./deploy.sh core-image-sato-sdk  jetson-tx2</code>.</p>
+<h2 id="post-flash-apt-get-sourceslist-and-cyclictest">Post-flash: Apt-get sources.list and Cyclictest</h2>
+<p>Some post-flash actions on the TX2 device to prepare some comparison vs. a later PREEMPT-RT patched kernel. Will need <code>rt-tests</code> tool cyclictest on the device.</p>
+<ul>
+<li>Set up apt-get sources.list</li>
+</ul>
+<p>Our built image comes with apt-get because we&rsquo;ve set added these to build/conf/local.conf (maybe only the package_deb is necessary for that):</p>
+<pre tabindex="0"><code>MACHINE = &#34;jetson-tx2&#34;
+MACHINE_ESSENTIAL_EXTRA_RRECOMMENDS += &#34;kernel-modules&#34;
+
+DL_DIR ?= &#34;/home/${USER}/Yocto/downloads&#34;
+SSTATE_DIR ?= &#34;/home/${USER}/Yocto/sstate_dir&#34;
+
+PACKAGE_CLASSES ?= &#34;package_deb&#34;
+
+EXTRA_IMAGE_FEATURES ?= &#34;debug-tweaks tools-sdk package-management&#34;
+IMAGE_CLASSES += &#34;image_types_tegra&#34;
+
+PREFERRED_VERSION_python3 = &#34;3.8%&#34;
+PREFERRED_VERSION_python3-native = &#34;3.8%&#34;
+
+BB_NUMBER_THREADS = &#39;11&#39;
+PARALLEL_MAKE = &#39;-j11&#39;
+</code></pre><p>After tx2 bootstrapped, set this to <a href="https://gist.github.com/josephlr/5034c933bbcfddc25a9275037821b048">/etc/apt/sources.list</a>:</p>
+<pre tabindex="0"><code>deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic main restricted universe multiverse
+deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates main restricted universe multiverse
+deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse
+deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security main restricted universe multiverse
+
+deb [arch=arm64,armhf,ppc64el,s390x] http://ports.ubuntu.com/ubuntu-ports/ bionic main restricted universe multiverse
+deb [arch=arm64,armhf,ppc64el,s390x] http://ports.ubuntu.com/ubuntu-ports/ bionic-updates main restricted universe multiverse
+deb [arch=arm64,armhf,ppc64el,s390x] http://ports.ubuntu.com/ubuntu-ports/ bionic-backports main restricted universe multiverse
+deb [arch=arm64,armhf,ppc64el,s390x] http://ports.ubuntu.com/ubuntu-ports/ bionic-security main restricted universe multiverse
+</code></pre><ul>
+<li>Install rt-tests</li>
+</ul>
+<p>Then do <code>apt-get update</code>, then install rt-tests:</p>
+<pre tabindex="0"><code>apt-get install rt-tests
+</code></pre><p>It complains about below, which might be resolved by <code>dpkg -i --force-overwrite &lt;filename&gt;.deb</code> to force overwrite, but I don&rsquo;t bother to do that, since , but it seems <code>cyclictest</code> has been installed successfully.</p>
+<pre tabindex="0"><code>Preparing to unpack .../xz-utils_5.2.2-1.3ubuntu0.1_arm64.deb ...
+Unpacking xz-utils (5.2.2-1.3ubuntu0.1) ...
+dpkg: error processing archive /var/cache/apt/archives/xz-utils_5.2.2-1.3ubuntu0.1_arm64.deb (--unpack):
+ trying to overwrite &#39;/usr/bin/lzmainfo&#39;, which is also in package xz 5.2.4-r0
+dpkg-deb: error: paste subprocess was killed by signal (Broken pipe)
+Selecting previously unselected package rt-tests.
+Preparing to unpack .../rt-tests_1.0-3_arm64.deb ...
+Unpacking rt-tests (1.0-3) ...
+Errors were encountered while processing:
+ /var/cache/apt/archives/xz-utils_5.2.2-1.3ubuntu0.1_arm64.deb
+E: Sub-process /usr/bin/dpkg returned an error code (1)
+</code></pre><ul>
+<li>run cyclictest</li>
+</ul>
+<pre tabindex="0"><code>root@jetson-tx2:~# uname -a
+Linux jetson-tx2 4.9.140-l4t-r32.3.1+ga0004d2ad6a4 #1 SMP PREEMPT ... aarch64 aarch64 aarch64 GNU/Linux
+
+root@jetson-tx2:~#  cyclictest -t 5 -p 80 -n
+# /dev/cpu_dma_latency set to 0us
+policy: fifo: loadavg: 0.06 0.08 0.08 1/222 3921          
+
+T: 0 ( 3913) P:80 I:1000 C: 297462 Min:      7 Act:   29 Avg:   31 Max:     334
+T: 1 ( 3914) P:80 I:1500 C: 198308 Min:      6 Act:   28 Avg:   29 Max:     230
+T: 2 ( 3915) P:80 I:2000 C: 148731 Min:      8 Act:   23 Avg:   31 Max:     288
+T: 3 ( 3916) P:80 I:2500 C: 118985 Min:      6 Act:   43 Avg:   29 Max:     234
+T: 4 ( 3917) P:80 I:3000 C:  99154 Min:      6 Act:   23 Avg:   30 Max:     201
+</code></pre><h2 id="patch-preempt-rt">Patch PREEMPT-RT</h2>
+<p>These links are referred to as doing the patch:</p>
+<ul>
+<li>meta-tegra: [Applying PREEMPT RT Patches dunfell l4t r32.4.3](Applying PREEMPT RT Patches dunfell l4t r32.4.3)</li>
+<li>NVidia forum: <a href="https://forums.developer.nvidia.com/t/preempt-rt-patches-for-jetson-nano/72941">PREEMPT-RT patches for Jetson Nano</a></li>
+</ul>
+<p>Recorded steps:</p>
+<pre tabindex="0"><code>pwd: ~/yocto-tx2-jp43-rt/build
+bitbake-layers create-layer ../meta-tx2-jp43
+bitbake-layers add-layer ../meta-tx2-jp43
+devtool modify linux-tegra
+
+pwd: ~/yocto-tx2-jp43-rt/build/workspace/sources/linux-tegra/scripts
+./rt-patch.sh apply-patches
+
+pwd: ~/yocto-tx2-jp43-rt/build
+devtool menuconfig linux-tegra
+</code></pre><p>Configure these:</p>
+<pre tabindex="0"><code>General setup -&gt; Timer subsystem -&gt; Timer tick handling -&gt; Full dynticks system (tickless)
+Kernel Features -&gt; Preemption  Model: Fully Preemptible Kernel (RT)
+Optional: Kernel Features -&gt; Timer frequency: 1000 HZ (default is 250Hz)
+</code></pre><p>The changes in menuconfig is logged in file <code>~/yocto-tx2-jp43-rt/build/workspace/sources/linux-tegra/oe-local-files/devtool-fragment.cfg</code>:</p>
+<pre tabindex="0"><code># CONFIG_NO_HZ_IDLE is not set
+CONFIG_NO_HZ_FULL=y
+# CONFIG_NO_HZ_FULL_ALL is not set
+# CONFIG_NO_HZ_FULL_SYSIDLE is not set
+CONFIG_VIRT_CPU_ACCOUNTING=y
+# CONFIG_TICK_CPU_ACCOUNTING is not set
+CONFIG_VIRT_CPU_ACCOUNTING_GEN=y
+CONFIG_PREEMPT_RCU=y
+CONFIG_CONTEXT_TRACKING=y
+# CONFIG_CONTEXT_TRACKING_FORCE is not set
+CONFIG_RCU_NOCB_CPU=y
+CONFIG_RCU_NOCB_CPU_NONE=y
+# CONFIG_RCU_NOCB_CPU_ZERO is not set
+# CONFIG_RCU_NOCB_CPU_ALL is not set
+CONFIG_PREEMPT=y
+CONFIG_PREEMPT_RT_BASE=y
+CONFIG_PREEMPT_LAZY=y
+# CONFIG_PREEMPT_NONE is not set
+CONFIG_PREEMPT_RT_FULL=y
+CONFIG_PREEMPT_COUNT=y
+# CONFIG_TRANSPARENT_HUGEPAGE_ALWAYS is not set
+CONFIG_DEBUG_PREEMPT=y
+# CONFIG_PREEMPT_TRACER is not set
+</code></pre><p>Continue building kernel and image:</p>
+<pre tabindex="0"><code>devtool build linux-tegra
+devtool build-image core-image-sato-dev
+</code></pre><h2 id="combine-both-patches">Combine both patches</h2>
+<pre tabindex="0"><code>@ubuntu18:~/yocto-tx2-jp43-rt$ tree ./meta-tx2-jp43/
+./meta-tx2-jp43/
+├── conf
+│   └── layer.conf
+├── COPYING.MIT
+├── README
+└── recipes-kernel
+    └── linux
+        ├── linux-tegra
+        │   ├── 0001-Apply-PREEMPT-RT-patch-to-patches-l4t-r32.3.1-on-lin.patch
+        │   ├── 0002-Workaround-build-installation-issues-related-to-perf.patch
+        │   └── devtool-fragment.cfg
+        └── linux-tegra_%.bbappend
+
+@ubuntu18:~/yocto-tx2-jp43-rt$ cat meta-tx2-jp43/recipes-kernel/linux/linux-tegra_%.bbappend 
+FILESEXTRAPATHS_prepend := &#34;${THISDIR}/${PN}:&#34;
+
+SRC_URI += &#34;file://devtool-fragment.cfg file://0001-Apply-PREEMPT-RT-patch-to-patches-l4t-r32.3.1-on-lin.patch&#34;
+SRC_URI += &#34;file://0002-Workaround-build-installation-issues-related-to-perf.patch&#34;
+
+@ubuntu18:~/yocto-tx2-jp43-rt/build$ bitbake core-image-sato-sdk
+</code></pre><p>Run cyclictest (can compare with the run w/o RT patch):</p>
+<pre tabindex="0"><code>root@jetson-tx2:~# uname -a
+Linux jetson-tx2 4.9.140-rt93-l4t-r32.3.1+ga0004d2ad6a4 #1 SMP PREEMPT RT ... aarch64 aarch64 aarch64 GNU/Linux
+
+root@jetson-tx2:~#  cyclictest -t 5 -p 80 -n
+# /dev/cpu_dma_latency set to 0us
+policy: fifo: loadavg: 0.17 0.25 0.18 2/306 3979          
+
+T: 0 ( 3971) P:80 I:1000 C: 279669 Min:      7 Act:   31 Avg:   29 Max:     127
+T: 1 ( 3972) P:80 I:1500 C: 186446 Min:      7 Act:   29 Avg:   30 Max:     139
+T: 2 ( 3973) P:80 I:2000 C: 139834 Min:      8 Act:   24 Avg:   31 Max:     146
+T: 3 ( 3974) P:80 I:2500 C: 111867 Min:      8 Act:   29 Avg:   31 Max:     117
+T: 4 ( 3975) P:80 I:3000 C:  93223 Min:      7 Act:   28 Avg:   30 Max:     110
+</code></pre>]]></description>
+      
+    </item>
+    
+    
+    
+    <item>
       <title>Yocto on TX2 with Jetpack4.3</title>
       <link>https://jinchenglee.github.io/posts/06102024_yocto_on_tx2/</link>
       <pubDate>Mon, 10 Jun 2024 17:08:34 -0700</pubDate>
