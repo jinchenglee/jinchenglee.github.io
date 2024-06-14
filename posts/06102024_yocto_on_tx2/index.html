@@ -33,13 +33,14 @@
 
     
     
-    <link type="text/css" rel="stylesheet" href=https://jinchenglee.github.io/css/styles.abbd6311bb4b6ca58f8e7398140529245ae0f6428b759fcd830742eee2619eabb900ba9914a9affb82aa9a16a9b9ea727bb315315a976a0db0e7513a5f12c504.css integrity="sha512-q71jEbtLbKWPjnOYFAUpJFrg9kKLdZ/NgwdC7uJhnqu5ALqZFKmv&#43;4Kqmhapuepye7MVMVqXag2w51E6XxLFBA==" />
+    <link type="text/css" rel="stylesheet" href=https://jinchenglee.github.io/css/styles.d06e6ce7aa4829562b182fcf3bc1a64729d86fc5710388d094d776e6ab88f465ea029001c3d799557ffbb3d297974a4fc3de795de69ed23fea6257899e0bd76e.css integrity="sha512-0G5s56pIKVYrGC/PO8GmRynYb8VxA4jQlNd25quI9GXqApABw9eZVX/7s9KXl0pPw955Xeae0j/qYleJngvXbg==" />
 <meta name="author" content="" />
 
     
     
         <meta name="description" content="etpack4.3
-Default meta-tegra build Build core-image-minimal. Build core-image-sato-dev Patch kernel with PREEMPT-RT Getting Ready for kernel-dev Using devtool according to Yocto Doc. Using devtool to Patch the Kernel Save the patch work for future use Yocto build with RT patch from scratch This blog tries to build TX2 image with industry-default flow for embedded system &amp;ndash; the Yocto project, for ancient Jetson TX2 with Jetpack 4.3 (L4T R32." />
+This blog tries to build TX2 image with industry-default flow for embedded system &amp;ndash; the Yocto project, for ancient Jetson TX2 with Jetpack 4.3 (L4T R32.3.1).
+Default meta-tegra build Sync down meta-tegra with right branch dunfell-l4t-r32.3.1. Also, please check L4T R32.3.1 Notes. cd ~ &amp;amp;&amp;amp; mkdir yocto-tx2-jp43 &amp;amp;&amp;amp; cd yocto-tx2-jp43 git clone https://github.com/OE4T/meta-tegra.git cd meta-tegra git branch -a git checkout dunfell-l4t-r32.3.1 Sync down poky with right branch dunfell." />
     
 
 <meta property="og:site_name"
@@ -61,7 +62,7 @@ Default meta-tegra build Build core-image-minimal. Build core-image-sato-dev Pat
         content="https://jinchenglee.github.io/img/icon.svg" />
     
         <meta property="og:description" content="#Yocto on TX2 with Jetpack4.3
-Default meta-tegra build Build core-image-minimal. Build core-image-sato-dev Patch kernel with PREEMPT-RT Getting Ready for kernel" />
+This blog tries to build TX2 image with industry-default flow for embedded system &amp;ndash; the Yocto project, for ancient Jetson TX" />
     
 
 <meta name="twitter:card" content="summary_large_image" />
@@ -79,7 +80,7 @@ Default meta-tegra build Build core-image-minimal. Build core-image-sato-dev Pat
         content="https://jinchenglee.github.io/img/icon.svg" />
     
         <meta name="twitter:description" content="#Yocto on TX2 with Jetpack4.3
-Default meta-tegra build Build core-image-minimal. Build core-image-sato-dev Patch kernel with PREEMPT-RT Getting Ready for kernel" />
+This blog tries to build TX2 image with industry-default flow for embedded system &amp;ndash; the Yocto project, for ancient Jetson TX" />
     
 
 <link rel="manifest" href="/manifest/index.json" />
@@ -159,6 +160,49 @@ Default meta-tegra build Build core-image-minimal. Build core-image-sato-dev Pat
         
     </div>
     
+        <div id="sidebar_nav"><nav>
+    
+    <ul id="main-nav">
+        <li><a href="/">Home</a></li>
+        
+            <li><a href="/posts/">Posts</a></li>
+        
+        
+        
+        
+        
+        
+        
+            <li><a href="/tags/">Tags</a></li>
+        
+        
+    </ul>
+</nav>
+</div>
+        
+            <div class="sidebarToc">
+                <hr />
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#default-meta-tegra-build">Default meta-tegra build</a>
+      <ul>
+        <li><a href="#build-core-image-minimal">Build core-image-minimal.</a></li>
+        <li><a href="#build-core-image-sato-dev">Build core-image-sato-dev</a></li>
+      </ul>
+    </li>
+    <li><a href="#patch-kernel-with-preempt-rt">Patch kernel with PREEMPT-RT</a>
+      <ul>
+        <li><a href="#getting-ready-for-kernel-dev-using-devtool-according-to-yocto-doc9httpsdocsyoctoprojectorgkernel-devcommonhtmlgetting-ready-to-develop-using-devtool">Getting Ready for kernel-dev Using devtool according to <a href="9https://docs.yoctoproject.org/kernel-dev/common.html#getting-ready-to-develop-using-devtool">Yocto Doc</a>.</a></li>
+        <li><a href="#using-devtool-to-patch-the-kernel">Using devtool to Patch the Kernel</a></li>
+        <li><a href="#save-the-patch-work-for-future-use">Save the patch work for future use</a></li>
+      </ul>
+    </li>
+    <li><a href="#yocto-build-with-rt-patch-from-scratch">Yocto build with RT patch from scratch</a></li>
+  </ul>
+</nav>
+            </div>
+        
+    
 
 </header>
 <div id="contentContainer">
@@ -177,27 +221,29 @@ Default meta-tegra build Build core-image-minimal. Build core-image-sato-dev Pat
     
     
     
-    
-    <div><p>#Yocto on TX2 with Jetpack4.3</p>
-<nav id="TableOfContents">
-  <ol>
+    <div class="articleToc">
+    <nav id="TableOfContents">
+  <ul>
     <li><a href="#default-meta-tegra-build">Default meta-tegra build</a>
-      <ol>
+      <ul>
         <li><a href="#build-core-image-minimal">Build core-image-minimal.</a></li>
         <li><a href="#build-core-image-sato-dev">Build core-image-sato-dev</a></li>
-      </ol>
+      </ul>
     </li>
     <li><a href="#patch-kernel-with-preempt-rt">Patch kernel with PREEMPT-RT</a>
-      <ol>
+      <ul>
         <li><a href="#getting-ready-for-kernel-dev-using-devtool-according-to-yocto-doc9httpsdocsyoctoprojectorgkernel-devcommonhtmlgetting-ready-to-develop-using-devtool">Getting Ready for kernel-dev Using devtool according to <a href="9https://docs.yoctoproject.org/kernel-dev/common.html#getting-ready-to-develop-using-devtool">Yocto Doc</a>.</a></li>
         <li><a href="#using-devtool-to-patch-the-kernel">Using devtool to Patch the Kernel</a></li>
         <li><a href="#save-the-patch-work-for-future-use">Save the patch work for future use</a></li>
-      </ol>
+      </ul>
     </li>
     <li><a href="#yocto-build-with-rt-patch-from-scratch">Yocto build with RT patch from scratch</a></li>
-  </ol>
+  </ul>
 </nav>
+    <hr />
+</div>
 
+    <div><p>#Yocto on TX2 with Jetpack4.3</p>
 <p>This blog tries to build TX2 image with industry-default flow for embedded system &ndash; the Yocto project, for ancient Jetson TX2 with Jetpack 4.3 (L4T R32.3.1).</p>
 <h2 id="default-meta-tegra-build">Default meta-tegra build</h2>
 <ul>
