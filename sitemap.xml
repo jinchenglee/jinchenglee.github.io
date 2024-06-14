@@ -2,39 +2,36 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/posts/</loc>
+    <loc>https://jinchenglee.github.io/posts/</loc>
     <lastmod>2024-06-13T21:42:50-07:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/</loc>
+    <loc>https://jinchenglee.github.io/</loc>
     <lastmod>2024-06-13T21:42:50-07:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/06132024_yocto_patch_l4t.r32.3.1_tx2/</loc>
-    <lastmod>2024-06-13T21:42:50-07:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/posts/06102024_yocto_on_tx2/</loc>
+    <loc>https://jinchenglee.github.io/posts/06102024_yocto_on_tx2/</loc>
     <lastmod>2024-06-10T17:08:34-07:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/06042024_r200_cam_on_tx2_j120/</loc>
+    <loc>https://jinchenglee.github.io/posts/06042024_r200_cam_on_tx2_j120/</loc>
     <lastmod>2024-06-04T17:46:09-07:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/06032024_r200_cam_on_tx2/</loc>
+    <loc>https://jinchenglee.github.io/posts/06032024_r200_cam_on_tx2/</loc>
     <lastmod>2024-06-04T17:44:06-07:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/blog/</loc>
+    <loc>https://jinchenglee.github.io/blog/</loc>
     <lastmod>2024-06-01T18:19:45-07:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/blog/my-first-post/</loc>
+    <loc>https://jinchenglee.github.io/blog/my-first-post/</loc>
     <lastmod>2024-06-01T18:19:45-07:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/my-first-post/</loc>
+    <loc>https://jinchenglee.github.io/posts/my-first-post/</loc>
     <lastmod>2024-06-01T18:19:45-07:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/categories/</loc>
+    <loc>https://jinchenglee.github.io/categories/</loc>
   </url><url>
-    <loc>http://localhost:1313/manifest/index.json</loc>
+    <loc>https://jinchenglee.github.io/manifest/index.json</loc>
   </url><url>
-    <loc>http://localhost:1313/search/</loc>
+    <loc>https://jinchenglee.github.io/search/</loc>
   </url><url>
-    <loc>http://localhost:1313/tags/</loc>
+    <loc>https://jinchenglee.github.io/tags/</loc>
   </url>
 </urlset>

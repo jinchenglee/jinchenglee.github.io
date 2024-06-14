@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><?xml-stylesheet href="/feed_style.xsl" type="text/xsl"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="https://www.rssboard.org/media-rss">
   <channel>
     <title>Blogs on Vitob&#39;s Blog Site</title>
-    <link>http://localhost:1313/blog/</link>
+    <link>https://jinchenglee.github.io/blog/</link>
     <description>Recent content in Blogs on Vitob&#39;s Blog Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 01 Jun 2024 18:19:45 -0700</lastBuildDate><atom:link href="http://localhost:1313/blog/index.xml" rel="self" type="application/rss+xml" /><icon>http://localhost:1313/img/icon.svg</icon>
+    <lastBuildDate>Sat, 01 Jun 2024 18:19:45 -0700</lastBuildDate><atom:link href="https://jinchenglee.github.io/blog/index.xml" rel="self" type="application/rss+xml" /><icon>https://jinchenglee.github.io/img/icon.svg</icon>
     
     
     <item>
       <title>My First Post</title>
-      <link>http://localhost:1313/blog/my-first-post/</link>
+      <link>https://jinchenglee.github.io/blog/my-first-post/</link>
       <pubDate>Sat, 01 Jun 2024 18:19:45 -0700</pubDate>
       
-      <guid>http://localhost:1313/blog/my-first-post/</guid>
+      <guid>https://jinchenglee.github.io/blog/my-first-post/</guid>
       <description><![CDATA[<p>This is my first blog using Hugo generated contents backed by github.io.</p>
 <p>It records how to add new blog article using markdown.</p>
 <h2 id="steps-to-add-a-blog-article">Steps to add a blog article</h2>
