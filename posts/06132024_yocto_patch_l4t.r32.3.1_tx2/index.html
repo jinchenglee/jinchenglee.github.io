@@ -22,7 +22,7 @@
 
 <title>
         
-            06132024_yocto_patch_l4t.r32.3.1_tx2  &ndash;
+            Yocto kernel patch L4T R32.3.1 on tx2  &ndash;
         
         Vitob&#39;s Blog Site
     </title>
@@ -38,15 +38,15 @@
 
     
     
-        <meta name="description" content="4T R32.3.1 on tx2 Patch to fix *-sdk build failures When a unmodified yocto build environment is setup (see previous blog about Yocto on TX2, &amp;ldquo;default meta-tegra build&amp;rdquo;), trying to build *-sdk (e.g. core-image-sato-sdk) will fail although *-dev builds are fine.
+        <meta name="description" content="uild failures When a unmodified yocto build environment is setup (see previous blog about Yocto on TX2, &amp;ldquo;default meta-tegra build&amp;rdquo;), trying to build *-sdk (e.g. core-image-sato-sdk) will fail although *-dev builds are fine.
 compilation: srcline.c The failure is related to perf-1.0 tool that Linux kernel requires. This first error comes from kernel compilation of tools/perf/util/srcline.c.
-/build/tmp/work/intel_core2_32-poky-linux/perf/1.0-r9/perf-1.0/perf-in.o: in function `find_address_in_section&amp;#39;: /usr/src/debug/perf/1." />
+/build/tmp/work/intel_core2_32-poky-linux/perf/1.0-r9/perf-1.0/perf-in.o: in function `find_address_in_section&amp;#39;: /usr/src/debug/perf/1.0-r9/perf-1.0/tools/perf/util/srcline.c:200: undefined reference to `bfd_get_section_flags&amp;#39; A search online result shows hint how to fix the source code." />
     
 
 <meta property="og:site_name"
     content='Vitob&#39;s Blog Site' />
 
-    <meta property="og:title" content="06132024_yocto_patch_l4t.r32.3.1_tx2" />
+    <meta property="og:title" content="Yocto kernel patch L4T R32.3.1 on tx2" />
     <meta property="og:type" content="article" />
     
     <meta
@@ -61,7 +61,7 @@ compilation: srcline.c The failure is related to perf-1.0 tool that Linux kernel
     <meta property="og:image"
         content="http://localhost:1313/img/icon.svg" />
     
-        <meta property="og:description" content="Yocto kernel patch L4T R32.3.1 on tx2 Patch to fix *-sdk build failures When a unmodified yocto build environment is setup (see previous blog about Yocto on TX2" />
+        <meta property="og:description" content="Patch to fix *-sdk build failures When a unmodified yocto build environment is setup (see previous blog about Yocto on TX2, &amp;ldquo;default meta-tegra build&amp;rdqu" />
     
 
 <meta name="twitter:card" content="summary_large_image" />
@@ -71,14 +71,14 @@ compilation: srcline.c The failure is related to perf-1.0 tool that Linux kernel
 <meta property="twitter:url" content="http://localhost:1313/posts/06132024_yocto_patch_l4t.r32.3.1_tx2/" />
 
 
-    <meta name="twitter:title" content="06132024_yocto_patch_l4t.r32.3.1_tx2" />
+    <meta name="twitter:title" content="Yocto kernel patch L4T R32.3.1 on tx2" />
     
     
     
     <meta name="twitter:image"
         content="http://localhost:1313/img/icon.svg" />
     
-        <meta name="twitter:description" content="Yocto kernel patch L4T R32.3.1 on tx2 Patch to fix *-sdk build failures When a unmodified yocto build environment is setup (see previous blog about Yocto on TX2" />
+        <meta name="twitter:description" content="Patch to fix *-sdk build failures When a unmodified yocto build environment is setup (see previous blog about Yocto on TX2, &amp;ldquo;default meta-tegra build&amp;rdqu" />
     
 
 <link rel="manifest" href="/manifest/index.json" />
@@ -206,7 +206,7 @@ compilation: srcline.c The failure is related to perf-1.0 tool that Linux kernel
                     <main>
 <article class="card single">
     
-        <h1>06132024_yocto_patch_l4t.r32.3.1_tx2</h1>
+        <h1>Yocto kernel patch L4T R32.3.1 on tx2</h1>
     
     
         <p class="date">
@@ -237,8 +237,7 @@ compilation: srcline.c The failure is related to perf-1.0 tool that Linux kernel
     <hr />
 </div>
 
-    <div><h1 id="yocto-kernel-patch-l4t-r3231-on-tx2">Yocto kernel patch L4T R32.3.1 on tx2</h1>
-<h2 id="patch-to-fix--sdk-build-failures">Patch to fix <code>*-sdk</code> build failures</h2>
+    <div><h2 id="patch-to-fix--sdk-build-failures">Patch to fix <code>*-sdk</code> build failures</h2>
 <p>When a unmodified yocto build environment is setup (see previous blog about Yocto on TX2, &ldquo;default meta-tegra build&rdquo;), trying to build <code>*-sdk</code> (e.g. <code>core-image-sato-sdk</code>) will fail although <code>*-dev</code> builds are fine.</p>
 <h3 id="compilation-srclinec">compilation: srcline.c</h3>
 <p>The failure is related to <code>perf-1.0</code> tool that Linux kernel requires. This first error comes from kernel compilation of <code>tools/perf/util/srcline.c</code>.</p>
