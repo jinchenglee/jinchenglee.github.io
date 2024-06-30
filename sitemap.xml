@@ -3,10 +3,16 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://jinchenglee.github.io/posts/</loc>
-    <lastmod>2024-06-13T21:42:50-07:00</lastmod>
+    <lastmod>2024-06-29T21:06:18-07:00</lastmod>
   </url><url>
     <loc>https://jinchenglee.github.io/</loc>
-    <lastmod>2024-06-13T21:42:50-07:00</lastmod>
+    <lastmod>2024-06-29T21:06:18-07:00</lastmod>
+  </url><url>
+    <loc>https://jinchenglee.github.io/posts/06282024_yocto_l4t_r32.3.1_on_tx2_j120/</loc>
+    <lastmod>2024-06-29T21:06:18-07:00</lastmod>
+  </url><url>
+    <loc>https://jinchenglee.github.io/posts/06272024_create_kernel_patch_for_j120_carrier_board/</loc>
+    <lastmod>2024-06-29T21:05:00-07:00</lastmod>
   </url><url>
     <loc>https://jinchenglee.github.io/posts/06132024_yocto_patch_l4t.r32.3.1_tx2/</loc>
     <lastmod>2024-06-13T21:42:50-07:00</lastmod>

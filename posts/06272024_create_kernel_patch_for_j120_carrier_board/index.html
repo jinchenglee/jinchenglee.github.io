@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html class="" lang="en-us"><head>
+    
+    <meta name="robots" content="noai, noimageai">
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=7" />
+
+    <link
+    rel="icon"
+    href='/favicon.png'
+/>
+<link
+    rel="shortcut icon"
+    href='/favicon.ico'
+    type="image/x-icon"
+/>
+<link
+    rel="apple-touch-icon"
+    href='/apple-touch-icon.png'
+/>
+
+<title>
+        
+            Create Kernel Patch for TX2 J120 Carrier Board  &ndash;
+        
+        Vitob&#39;s Blog Site
+    </title>
+
+    
+    <link href="/symbols-nerd-font/symbols-nerd-font.css" rel="stylesheet" integrity="sha512-lydow8GLOLlYNOtHlksNCmGWWCBsbIEtikXpHzfWqx78HLlyQZHOzyLwPpKol4Th6aCwLUXOfODVYgwrd3nwKQ=="/>
+    <link href="/jetbrains-mono/jetbrains-mono.css" rel="stylesheet" integrity="sha512-tJxlgL6v1Y7kFf+qB8SloaAMKnOAw6WouknxXtIjkBux9Y/9aX81EUWOJO8c/3l98DmjG8brr4to7zaez606Fg=="/>
+
+    
+    
+    <link type="text/css" rel="stylesheet" href=https://jinchenglee.github.io/css/styles.d06e6ce7aa4829562b182fcf3bc1a64729d86fc5710388d094d776e6ab88f465ea029001c3d799557ffbb3d297974a4fc3de795de69ed23fea6257899e0bd76e.css integrity="sha512-0G5s56pIKVYrGC/PO8GmRynYb8VxA4jQlNd25quI9GXqApABw9eZVX/7s9KXl0pPw955Xeae0j/qYleJngvXbg==" />
+<meta name="author" content="" />
+
+    
+    
+        <meta name="description" content="sing Official Firmware J120 is a third-party Jetson TX2 carrier board from Auvidea, thus whenever new Jetpack was released there need updated firmware from Auvidea. This section describes how to apply the J120 updated firmware v3.0 released on Feb 2020 (download link):
+Feb 2020 J90/J120/J130 (202 MB) 3.0 supports: Jetson TX2 only – JetPack 4.3 (L4T 32.3.1) – 2x USB 3.0 – IMU MPU9250 (spidev1.0) – 1x GbE – 1x M." />
+    
+
+<meta property="og:site_name"
+    content='Vitob&#39;s Blog Site' />
+
+    <meta property="og:title" content="Create Kernel Patch for TX2 J120 Carrier Board" />
+    <meta property="og:type" content="article" />
+    
+    <meta
+        property="article:author" content="" />
+    <meta
+        property="article:published_time"
+        content='2024-06-29T21:05:00Z-0700' />
+    
+    <meta property="og:url" content="https://jinchenglee.github.io/posts/06272024_create_kernel_patch_for_j120_carrier_board/" />
+    
+    
+    <meta property="og:image"
+        content="https://jinchenglee.github.io/img/icon.svg" />
+    
+        <meta property="og:description" content="Patch Linux Kernel using Official Firmware J120 is a third-party Jetson TX2 carrier board from Auvidea, thus whenever new Jetpack was released there need update" />
+    
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="twitter:domain"
+      content='jinchenglee.github.io'
+/>
+<meta property="twitter:url" content="https://jinchenglee.github.io/posts/06272024_create_kernel_patch_for_j120_carrier_board/" />
+
+
+    <meta name="twitter:title" content="Create Kernel Patch for TX2 J120 Carrier Board" />
+    
+    
+    
+    <meta name="twitter:image"
+        content="https://jinchenglee.github.io/img/icon.svg" />
+    
+        <meta name="twitter:description" content="Patch Linux Kernel using Official Firmware J120 is a third-party Jetson TX2 carrier board from Auvidea, thus whenever new Jetpack was released there need update" />
+    
+
+<link rel="manifest" href="/manifest/index.json" />
+</head>
+
+
+<body>
+        <div id="baseContainer"><header class="">
+<div class="titleAndSearchContainer">
+        <div id="titleContainer">
+            
+                <a class="unstyledLink" href="/">
+                    <img src='/logo.svg' alt='Logo'/>
+                </a>
+            
+            <div class="rightOfLogo">
+                <div class="titleAndHamburger">
+                    <h1>
+                        <a class="unstyledLink" href="/">Vitob&#39;s Blog Site</a>
+                        
+                    </h1>
+                    
+                </div>
+                <div id="wide_nav"><nav>
+    
+    <ul id="main-nav">
+        <li><a href="/">Home</a></li>
+        
+            <li><a href="/posts/">Posts</a></li>
+        
+        
+        
+        
+        
+        
+        
+            <li><a href="/tags/">Tags</a></li>
+        
+        
+    </ul>
+</nav>
+</div>
+            </div>
+        </div>
+        <div class="search">
+    <input id="searchbar" type="text" placeholder='Search' />
+    <span class="nerdlink" onclick="newSearch();">&#xf002;</span>
+</div>
+<script>
+    function newSearch() {
+        let term = searchbar.value.trim();
+        if (!term) return;
+        location.href = `/search/?q=${term}`;
+    }
+    searchbar.onkeyup = (ev) => {if (ev.keyCode == 13) newSearch()};
+</script>
+
+    </div>
+    <div id="links">
+        <a
+    
+        rel="noreferrer"
+    
+    target="_blank"
+    class="nerdlink"
+    href="/index.xml">
+    
+    
+        &#xf09e;
+    
+    <span>
+        RSS
+    </span>
+</a>
+
+        
+        
+    </div>
+    
+        <div id="sidebar_nav"><nav>
+    
+    <ul id="main-nav">
+        <li><a href="/">Home</a></li>
+        
+            <li><a href="/posts/">Posts</a></li>
+        
+        
+        
+        
+        
+        
+        
+            <li><a href="/tags/">Tags</a></li>
+        
+        
+    </ul>
+</nav>
+</div>
+        
+            <div class="sidebarToc">
+                <hr />
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#patch-linux-kernel-using-official-firmware">Patch Linux Kernel using Official Firmware</a></li>
+    <li><a href="#verify-modified-kernel-source-files">Verify modified kernel source files</a>
+      <ul>
+        <li><a href="#download-correct-version">Download correct version</a></li>
+        <li><a href="#create-a-special-patch-file">Create a special patch file</a></li>
+        <li><a href="#apply-the-patch-file">Apply the patch file</a></li>
+        <li><a href="#compile-the-kernel-and-verify">Compile the kernel and verify</a></li>
+      </ul>
+    </li>
+    <li><a href="#create-patch-from-modified-kernel-source-files">Create patch from modified kernel source files</a></li>
+  </ul>
+</nav>
+            </div>
+        
+    
+
+</header>
+<div id="contentContainer">
+                <div id="content">
+                    <main>
+<article class="card single">
+    
+        <h1>Create Kernel Patch for TX2 J120 Carrier Board</h1>
+    
+    
+        <p class="date">
+            <span title='Date'> </span>
+    2024-06-29
+
+</p>
+    
+    
+    
+    <div class="articleToc">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#patch-linux-kernel-using-official-firmware">Patch Linux Kernel using Official Firmware</a></li>
+    <li><a href="#verify-modified-kernel-source-files">Verify modified kernel source files</a>
+      <ul>
+        <li><a href="#download-correct-version">Download correct version</a></li>
+        <li><a href="#create-a-special-patch-file">Create a special patch file</a></li>
+        <li><a href="#apply-the-patch-file">Apply the patch file</a></li>
+        <li><a href="#compile-the-kernel-and-verify">Compile the kernel and verify</a></li>
+      </ul>
+    </li>
+    <li><a href="#create-patch-from-modified-kernel-source-files">Create patch from modified kernel source files</a></li>
+  </ul>
+</nav>
+    <hr />
+</div>
+
+    <div><h2 id="patch-linux-kernel-using-official-firmware">Patch Linux Kernel using Official Firmware</h2>
+<p>J120 is a third-party Jetson TX2 carrier board from Auvidea, thus whenever new Jetpack was released there need updated firmware from Auvidea. This section describes how to apply the J120 updated <a href="https://auvidea.eu/firmware/">firmware v3.0</a> released on Feb 2020 (download <a href="https://auvidea.eu/download/firmware/J120/J90-J120-J130_4_3.tar.bz2">link</a>):</p>
+<pre tabindex="0"><code>Feb 2020 	J90/J120/J130 (202 MB) 	3.0 
+
+supports: Jetson TX2 only
+– JetPack 4.3 (L4T 32.3.1)
+– 2x USB 3.0
+– IMU MPU9250 (spidev1.0)
+– 1x GbE
+– 1x M.2 NVME PCIe x4
+– port mapping: config 2 (default)
+</code></pre><p>Unzip the downloaded file shows two tar&rsquo;ed packages: kernel_out and kernel_src. The former is already-built binaries in the relase; the latter contains the corresponding modified linux kernel source files that the former binaries were generated.</p>
+<p>The steps to apply the patches are listed in file How_to_flash_TX2_with_nvidia_sdkmanager.txt as below. It uses the released patched binaries only.</p>
+<pre tabindex="0"><code>How to install the auvidea kernel the nvidia sdkmanager
+####################################################################################
+This manual is written for the Jetson TX2
+
+
+1. prepare the sdk
+ONLY NEEDED IF NO TX2 WAS FLASHED BEFORE
+-start the sdkmanager
+-select the Jetson TX2(P3310) as target Hardware
+-select Jetpack 4.3 as target operating system
+-start the installation until the sdk asks you for either use automatic or manual setup
+ -&gt; at this point you can choose to &#34;skip&#34; the rest of the installation and continue with step 2 of this instructions
+
+2. copy the contents of the kernel_out folder in the auvidea packet to the nvida_sdk folder
+-&gt; cp ~/kernel_out/* /home/USER/nvidia/nvidia_sdk/JetPack_4.3_Linux_P3310/
+ 
+3. switch in the TX2 folder and apply binaries 
+-&gt; cd /home/USER/nvidia/nvidia_sdk/JetPack_4.3_Linux_P3310/Linux_for_Tegra/
+-&gt; sudo ./apply_binaries.sh
+
+4. start the sdkmanger and follow the normal installation process
+
+
+
+You can also use the flowing commands to flash the TX2 after Step 3:
+
+cd /home/USER/nvidia/nvidia_sdk/JetPack_4.3_Linux_P3310/Linux_for_Tegra/
+</code></pre><h2 id="verify-modified-kernel-source-files">Verify modified kernel source files</h2>
+<h3 id="download-correct-version">Download correct version</h3>
+<pre tabindex="0"><code>./source_sync.sh -k tegra-l4t-r32.3.1
+</code></pre><h3 id="create-a-special-patch-file">Create a special patch file</h3>
+<p>Let&rsquo;s call original unchanged kernel source directory <code>target_directory</code>, the directory contains patched sources <code>source_directory</code>.</p>
+<p>The condition is a bit complex:</p>
+<ol>
+<li>There exist files in <code>target_directory</code> that don&rsquo;t need to be modified and these files don&rsquo;t exist in <code>source directory</code>;</li>
+<li>There might exist new files/directories in <code>source directory</code> that don&rsquo;t exist in <code>target directory</code></li>
+</ol>
+<p>A simple <code>diff</code> to generate patch file is not possible.</p>
+<p>A script <code>generate_patch.sh</code> is created for the purpose:</p>
+<pre tabindex="0"><code>#!/bin/bash
+
+# Check if both arguments are provided
+if [ &#34;$#&#34; -ne 2 ]; then
+    echo &#34;Usage: $0 &lt;source_directory&gt; &lt;target_directory&gt;&#34;
+    exit 1
+fi
+
+SOURCE_DIR=&#34;$1&#34;
+TARGET_DIR=&#34;$2&#34;
+
+# Function to generate diff for a file
+generate_file_diff() {
+    local file=&#34;$1&#34;
+    local rel_path=&#34;${file#$SOURCE_DIR/}&#34;
+    if [ -f &#34;$TARGET_DIR/$rel_path&#34; ]; then
+        diff -uN &#34;$TARGET_DIR/$rel_path&#34; &#34;$file&#34;
+    else
+        diff -uN /dev/null &#34;$file&#34;
+    fi
+}
+
+# Function to process a directory
+process_directory() {
+    local dir=&#34;$1&#34;
+    local rel_dir=&#34;${dir#$SOURCE_DIR/}&#34;
+
+    # Create directory entry if it doesn&#39;t exist in target
+    if [ ! -d &#34;$TARGET_DIR/$rel_dir&#34; ] &amp;&amp; [ &#34;$rel_dir&#34; != &#34;&#34; ]; then
+        echo &#34;diff -uN $TARGET_DIR/$rel_dir $SOURCE_DIR/$rel_dir&#34;
+        echo &#34;--- $TARGET_DIR/$rel_dir&#34;
+        echo &#34;+++ $SOURCE_DIR/$rel_dir&#34;
+        echo &#34;@@ -0,0 +1 @@&#34;
+        echo &#34;+$rel_dir/&#34;
+    fi
+
+    # Process files in this directory
+    find &#34;$dir&#34; -maxdepth 1 -type f | while read -r file; do
+        generate_file_diff &#34;$file&#34;
+    done
+
+    # Recursively process subdirectories
+    find &#34;$dir&#34; -mindepth 1 -maxdepth 1 -type d | while read -r subdir; do
+        process_directory &#34;$subdir&#34;
+    done
+}
+
+# Start processing from the root of the source directory
+process_directory &#34;$SOURCE_DIR&#34; &gt; update.patch
+</code></pre><p>Run this script to generate <code>update.patch</code> file:</p>
+<pre tabindex="0"><code>xxx@ubuntu18:~/tx2-j120/J90-J120-J130_4_3/kernel_src$ pwd
+/home/xxx/tx2-j120/J90-J120-J130_4_3/kernel_src    &lt;= This dir is from Auvidea firmware v3.0
+xxx@ubuntu18:~/tx2-j120/J90-J120-J130_4_3/kernel_src$ bash ../generate_patch.sh . ~/tx2_source_build/r32-3-1_Release_v1.0/sources
+</code></pre><h3 id="apply-the-patch-file">Apply the patch file</h3>
+<p>We need another special script <code>apply_patch.sh</code> because we need first create those non-exist new directories in <code>target directory</code> first:</p>
+<pre tabindex="0"><code>#!/bin/bash
+
+PATCH_FILE=&#34;update.patch&#34;
+
+# Check if both arguments are provided
+if [ &#34;$#&#34; -ne 1 ]; then
+    echo &#34;Usage: $0 &lt;target_directory&gt;&#34;
+    exit 1
+fi
+
+TARGET_DIR=&#34;$1&#34;
+
+
+
+# Extract directory creations
+grep -E &#34;^\+[^+]\S+\w\/$&#34; &#34;$PATCH_FILE&#34; | sed &#39;s/^+//&#39; | grep &#34;/$&#34; &gt; directories.txt
+
+# Create directories
+while read -r dir; do
+    mkdir -p &#34;$TARGET_DIR/$dir&#34;
+done &lt; directories.txt
+
+# Remove directory creation diffs from the patch file
+sed -i &#39;/^diff.*\/$/d; /^---.*\/$/d; /^+++.*\/$/d; /^@@ -0,0 +1 @@$/d; /^\+[^+]\S+\w\/$/d&#39; &#34;$PATCH_FILE&#34;
+
+# Apply the modified patch
+patch -p1 -N -d &#34;$TARGET_DIR&#34; &lt; &#34;$PATCH_FILE&#34;
+</code></pre><p>Then apply the patch:</p>
+<pre tabindex="0"><code>bash ../apply_patch.sh ~/tx2_source_build/r32-3-1_Release_v1.0/sources
+</code></pre><h3 id="compile-the-kernel-and-verify">Compile the kernel and verify</h3>
+<p>Skip here the manual process.</p>
+<h2 id="create-patch-from-modified-kernel-source-files">Create patch from modified kernel source files</h2>
+<p>After we&rsquo;ve verified the source file changes, we can leverage Yocto <code>devtool</code> to generate the patch file. How to get the Linux kernel sources and use <code>devtool</code> can be found in previous blogs. Skipping here. The key part is to get the source files patched using the two special scripts (<code>generate_patch.sh</code> and <code>apply_patch.sh</code> in last section of this blog article.</p>
+<p>The patch is recorded in <a href="https://github.com/jinchenglee/meta-tx2-jp43/commit/e30ec5e1c176861238add59cd4ead200e6f99043">this commit</a> into branch <code>dev/tx2-j120-jp43</code> of <a href="https://github.com/jinchenglee/meta-tx2-jp43">meta-tx2-jp43</a>. The key patch is <a href="https://github.com/jinchenglee/meta-tx2-jp43/blob/dev/tx2-j120-jp43/recipes-kernel/linux/linux-tegra/0003-Linux-kernel-patch-for-TX2-on-J120-carrier-board-wit.patch">0003-Linux-kernel-patch-for-TX2-on-J120-carrier-board-wit.patch</a>.</p>
+</div>
+</article>
+
+
+
+
+
+
+                    </main><footer>
+    <hr />
+
+<p><small>
+        2024 &copy; 
+    </small></p>
+    <p><small>
+        <a href='https://gitlab.com/gabmus/hugo-ficurinia'>Ficurinia theme</a> for <a href='https://gohugo.io'>Hugo</a> by <a href='https://gabmus.org'>Gabriele Musco</a>. Licensed under <a href='https://www.gnu.org/licenses/agpl-3.0.html'>GNU AGPLv3</a>.
+    </small></p>
+</footer>
+</div>
+            </div>
+        </div>
+
+
+</body>
+</html>

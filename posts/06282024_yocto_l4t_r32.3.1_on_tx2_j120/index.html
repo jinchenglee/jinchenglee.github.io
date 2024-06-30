@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html class="" lang="en-us"><head>
+    
+    <meta name="robots" content="noai, noimageai">
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=7" />
+
+    <link
+    rel="icon"
+    href='/favicon.png'
+/>
+<link
+    rel="shortcut icon"
+    href='/favicon.ico'
+    type="image/x-icon"
+/>
+<link
+    rel="apple-touch-icon"
+    href='/apple-touch-icon.png'
+/>
+
+<title>
+        
+            Yocto L4T R32.3.1 on TX2 J120  &ndash;
+        
+        Vitob&#39;s Blog Site
+    </title>
+
+    
+    <link href="/symbols-nerd-font/symbols-nerd-font.css" rel="stylesheet" integrity="sha512-lydow8GLOLlYNOtHlksNCmGWWCBsbIEtikXpHzfWqx78HLlyQZHOzyLwPpKol4Th6aCwLUXOfODVYgwrd3nwKQ=="/>
+    <link href="/jetbrains-mono/jetbrains-mono.css" rel="stylesheet" integrity="sha512-tJxlgL6v1Y7kFf+qB8SloaAMKnOAw6WouknxXtIjkBux9Y/9aX81EUWOJO8c/3l98DmjG8brr4to7zaez606Fg=="/>
+
+    
+    
+    <link type="text/css" rel="stylesheet" href=https://jinchenglee.github.io/css/styles.d06e6ce7aa4829562b182fcf3bc1a64729d86fc5710388d094d776e6ab88f465ea029001c3d799557ffbb3d297974a4fc3de795de69ed23fea6257899e0bd76e.css integrity="sha512-0G5s56pIKVYrGC/PO8GmRynYb8VxA4jQlNd25quI9GXqApABw9eZVX/7s9KXl0pPw955Xeae0j/qYleJngvXbg==" />
+<meta name="author" content="" />
+
+    
+    
+        <meta name="description" content=" with TX2 sitting on the J120 carrier board, we are ready to flash the setup with customized patched Yocto.
+Yocto on TX2-J120 with Jetpack4.3 Meta-tegra, Poky, meta-tx2-jp43 Very similar to previous blog article Yocto on TX2 with Jetpack4.3, we set up meta-tegra, poky, except that we need to setup layer meta-tx2-jp43 to a special branch for J120.
+cd ~ &amp;amp;&amp;amp; mkdir yocto-tx2-jp43-j120 &amp;amp;&amp;amp; cd yocto-tx2-jp43-j120 git clone https://github." />
+    
+
+<meta property="og:site_name"
+    content='Vitob&#39;s Blog Site' />
+
+    <meta property="og:title" content="Yocto L4T R32.3.1 on TX2 J120" />
+    <meta property="og:type" content="article" />
+    
+    <meta
+        property="article:author" content="" />
+    <meta
+        property="article:published_time"
+        content='2024-06-29T21:06:18Z-0700' />
+    
+    <meta property="og:url" content="https://jinchenglee.github.io/posts/06282024_yocto_l4t_r32.3.1_on_tx2_j120/" />
+    
+    
+    <meta property="og:image"
+        content="https://jinchenglee.github.io/img/icon.svg" />
+    
+        <meta property="og:description" content="Finally we are here, with TX2 sitting on the J120 carrier board, we are ready to flash the setup with customized patched Yocto.
+Yocto on TX2-J120 with Jetpack4." />
+    
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="twitter:domain"
+      content='jinchenglee.github.io'
+/>
+<meta property="twitter:url" content="https://jinchenglee.github.io/posts/06282024_yocto_l4t_r32.3.1_on_tx2_j120/" />
+
+
+    <meta name="twitter:title" content="Yocto L4T R32.3.1 on TX2 J120" />
+    
+    
+    
+    <meta name="twitter:image"
+        content="https://jinchenglee.github.io/img/icon.svg" />
+    
+        <meta name="twitter:description" content="Finally we are here, with TX2 sitting on the J120 carrier board, we are ready to flash the setup with customized patched Yocto.
+Yocto on TX2-J120 with Jetpack4." />
+    
+
+<link rel="manifest" href="/manifest/index.json" />
+</head>
+
+
+<body>
+        <div id="baseContainer"><header class="">
+<div class="titleAndSearchContainer">
+        <div id="titleContainer">
+            
+                <a class="unstyledLink" href="/">
+                    <img src='/logo.svg' alt='Logo'/>
+                </a>
+            
+            <div class="rightOfLogo">
+                <div class="titleAndHamburger">
+                    <h1>
+                        <a class="unstyledLink" href="/">Vitob&#39;s Blog Site</a>
+                        
+                    </h1>
+                    
+                </div>
+                <div id="wide_nav"><nav>
+    
+    <ul id="main-nav">
+        <li><a href="/">Home</a></li>
+        
+            <li><a href="/posts/">Posts</a></li>
+        
+        
+        
+        
+        
+        
+        
+            <li><a href="/tags/">Tags</a></li>
+        
+        
+    </ul>
+</nav>
+</div>
+            </div>
+        </div>
+        <div class="search">
+    <input id="searchbar" type="text" placeholder='Search' />
+    <span class="nerdlink" onclick="newSearch();">&#xf002;</span>
+</div>
+<script>
+    function newSearch() {
+        let term = searchbar.value.trim();
+        if (!term) return;
+        location.href = `/search/?q=${term}`;
+    }
+    searchbar.onkeyup = (ev) => {if (ev.keyCode == 13) newSearch()};
+</script>
+
+    </div>
+    <div id="links">
+        <a
+    
+        rel="noreferrer"
+    
+    target="_blank"
+    class="nerdlink"
+    href="/index.xml">
+    
+    
+        &#xf09e;
+    
+    <span>
+        RSS
+    </span>
+</a>
+
+        
+        
+    </div>
+    
+        <div id="sidebar_nav"><nav>
+    
+    <ul id="main-nav">
+        <li><a href="/">Home</a></li>
+        
+            <li><a href="/posts/">Posts</a></li>
+        
+        
+        
+        
+        
+        
+        
+            <li><a href="/tags/">Tags</a></li>
+        
+        
+    </ul>
+</nav>
+</div>
+        
+            <div class="sidebarToc">
+                <hr />
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#yocto-on-tx2-j120-with-jetpack43">Yocto on TX2-J120 with Jetpack4.3</a>
+      <ul>
+        <li><a href="#meta-tegra-poky-meta-tx2-jp43">Meta-tegra, Poky, meta-tx2-jp43</a></li>
+        <li><a href="#localconf-and-bblayersconf">Local.conf and bblayers.conf</a></li>
+        <li><a href="#build-image">Build Image</a></li>
+        <li><a href="#deploy">Deploy</a></li>
+      </ul>
+    </li>
+    <li><a href="#build-rtimulib2">Build RTIMULib2</a>
+      <ul>
+        <li><a href="#get-rtimulib2">Get RTIMULIB2</a></li>
+        <li><a href="#compile-rtimulib">Compile RTIMULib</a></li>
+        <li><a href="#compile-application">Compile Application</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+            </div>
+        
+    
+
+</header>
+<div id="contentContainer">
+                <div id="content">
+                    <main>
+<article class="card single">
+    
+        <h1>Yocto L4T R32.3.1 on TX2 J120</h1>
+    
+    
+        <p class="date">
+            <span title='Date'> </span>
+    2024-06-29
+
+</p>
+    
+    
+    
+    <div class="articleToc">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#yocto-on-tx2-j120-with-jetpack43">Yocto on TX2-J120 with Jetpack4.3</a>
+      <ul>
+        <li><a href="#meta-tegra-poky-meta-tx2-jp43">Meta-tegra, Poky, meta-tx2-jp43</a></li>
+        <li><a href="#localconf-and-bblayersconf">Local.conf and bblayers.conf</a></li>
+        <li><a href="#build-image">Build Image</a></li>
+        <li><a href="#deploy">Deploy</a></li>
+      </ul>
+    </li>
+    <li><a href="#build-rtimulib2">Build RTIMULib2</a>
+      <ul>
+        <li><a href="#get-rtimulib2">Get RTIMULIB2</a></li>
+        <li><a href="#compile-rtimulib">Compile RTIMULib</a></li>
+        <li><a href="#compile-application">Compile Application</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    <hr />
+</div>
+
+    <div><p>Finally we are here, with TX2 sitting on the J120 carrier board, we are ready to flash the setup with customized patched Yocto.</p>
+<h2 id="yocto-on-tx2-j120-with-jetpack43">Yocto on TX2-J120 with Jetpack4.3</h2>
+<h3 id="meta-tegra-poky-meta-tx2-jp43">Meta-tegra, Poky, meta-tx2-jp43</h3>
+<p>Very similar to previous blog article <a href="ihttps://jinchenglee.github.io/posts/06102024_yocto_on_tx2/">Yocto on TX2 with Jetpack4.3</a>, we set up meta-tegra, poky, except that we need to setup layer meta-tx2-jp43 to a special branch for J120.</p>
+<pre tabindex="0"><code>cd ~ &amp;&amp; mkdir yocto-tx2-jp43-j120 &amp;&amp; cd yocto-tx2-jp43-j120
+
+git clone https://github.com/OE4T/meta-tegra.git 
+cd meta-tegra
+git branch -a
+git checkout dunfell-l4t-r32.3.1
+
+cd ~/yocto-tx2-jp43-j120
+git clone https://github.com/yoctoproject/poky.git
+cd poky
+git branch -a
+git checkout dunfell
+
+cd ~/yocto-tx2-jp43-j120
+git clone https://github.com/jinchenglee/meta-tx2-jp43.git
+cd meta-tx2-jp43
+git branch -a
+git checkout dev/tx2-j120-jp43  # Special branch for TX2 on J120
+
+cd ~/yocto-tx2-jp43-j120
+source poky/oe-init-build-env
+</code></pre><h3 id="localconf-and-bblayersconf">Local.conf and bblayers.conf</h3>
+<ul>
+<li>Changes in local.conf</li>
+</ul>
+<pre tabindex="0"><code>MACHINE ??= &#34;jetson-tx2&#34;
+
+MACHINE_ESSENTIAL_EXTRA_RRECOMMENDS += &#34;kernel-modules&#34;
+
+DL_DIR ?= &#34;/home/${USER}/Yocto/downloads&#34;
+
+SSTATE_DIR ?= &#34;/home/${USER}/Yocto/sstate_dir&#34;
+
+PACKAGE_CLASSES ?= &#34;package_deb&#34;  # for apt (?)
+EXTRA_IMAGE_FEATURES ?= &#34;debug-tweaks tools-sdk package-management&#34;
+
+IMAGE_CLASSES += &#34;image_types_tegra&#34;
+
+PREFERRED_VERSION_python3 = &#34;3.8%&#34;
+PREFERRED_VERSION_python3-native = &#34;3.8%&#34;
+
+BB_NUMBER_THREADS = &#39;11&#39;
+PARALLEL_MAKE = &#39;-j11&#39;
+
+IMAGE_INSTALL_append = &#34; glfw cmake vim tmux&#34;
+</code></pre><ul>
+<li>Changes in bblayers.conf</li>
+</ul>
+<pre tabindex="0"><code>BBLAYERS ?= &#34; \
+  /home/${USER}/yocto-tx2-jp43/meta-tegra \
+  /home/${USER}/yocto-tx2-jp43/poky/meta \
+  /home/${USER}/yocto-tx2-jp43/poky/meta-poky \
+  /home/${USER}/yocto-tx2-jp43/poky/meta-yocto-bsp \
+  /home/${USER}/yocto-tx2-jp43/meta-tx2-jp43 \
+  /home/${USER}/yocto-tx2-jp43/meta-openembedded/meta-oe \ # cmake or gflw seems require this.
+  &#34;
+</code></pre><h3 id="build-image">Build Image</h3>
+<pre tabindex="0"><code>&gt; bitbake  core-image-sato-sdk    # Or core-image-sata-dev, core-image-minimal etc.
+</code></pre><h3 id="deploy">Deploy</h3>
+<p>Script:</p>
+<pre tabindex="0"><code>#!/bin/bash
+
+image=$1
+machine=$2
+
+scriptdir=&#34;$( cd &#34;$( dirname &#34;${BASH_SOURCE[0]}&#34; )&#34; &gt;/dev/null &amp;&amp; pwd )&#34;
+deployfile=${image}-${machine}.tegraflash.zip
+tmpdir=`mktemp`
+
+rm -rf $tmpdir
+mkdir -p $tmpdir
+echo &#34;Using temp directory $tmpdir&#34;
+pushd $tmpdir
+cp $scriptdir/build/tmp/deploy/images/${machine}/$deployfile .
+unzip $deployfile
+set -e
+sudo ./doflash.sh
+popd
+echo &#34;Removing temp directory $tmpdir&#34;
+rm -rf $tmpdir
+</code></pre><pre tabindex="0"><code>sudo ./deploy.sh core-image-sato-sdk jetson-tx2
+</code></pre><p>This image should have both real-time patch and RealSense R200 supports.</p>
+<pre tabindex="0"><code>root@jetson-tx2:~# uname -a
+Linux jetson-tx2 4.9.140-rt93-l4t-r32.3.1+ga0004d2ad6a4 #1 SMP PREEMPT RT Thu Jan 28 22:42:33 UTC 2021 aarch64 aarch64 aarch64 GNU/Linux
+</code></pre><h2 id="build-rtimulib2">Build RTIMULib2</h2>
+<p>My J120 carrier board has a on-board <a href="https://invensense.tdk.com/products/motion-tracking/9-axis/mpu-9250/">9-axis (Gyro, Accelerometer, Compass) MPU-9250</a>. Here we show how the demo app can be compiled and run on the Yocto-linux just flashed.</p>
+<h3 id="get-rtimulib2">Get RTIMULIB2</h3>
+<p>There&rsquo;s no git installed on the flashed TX2-J120. Let&rsquo;s get the zipped version from <a href="https://github.com/andrasj/RTIMULib2">github:RTIMULib2</a>, then <code>rcp</code> it over to device.</p>
+<pre tabindex="0"><code>rcp RTIMULib2-master.zip root@&lt;device ip addr&gt;:/home/root/
+</code></pre><h3 id="compile-rtimulib">Compile RTIMULib</h3>
+<pre tabindex="0"><code>root@jetson-tx2:~/RTIMULib2-master# cd RTIMULib/
+root@jetson-tx2:~/RTIMULib2-master/RTIMULib# ls
+CMakeLists.txt	RTFusionKalman4.cpp  RTIMUAccelCal.cpp	RTIMUHal.h	  RTIMULibDefs.h     RTIMUSettings.h
+IMUDrivers	RTFusionKalman4.h    RTIMUAccelCal.h	RTIMULIB LICENSE  RTIMUMagCal.cpp    RTMath.cpp
+RTFusion.cpp	RTFusionRTQF.cpp     RTIMUCalDefs.h	RTIMULib.h	  RTIMUMagCal.h      RTMath.h
+RTFusion.h	RTFusionRTQF.h	     RTIMUHal.cpp	RTIMULib.pri	  RTIMUSettings.cpp  build
+root@jetson-tx2:~/RTIMULib2-master/RTIMULib# mkdir build &amp;&amp; cd build
+root@jetson-tx2:~/RTIMULib2-master/RTIMULib/build# cmake ..
+root@jetson-tx2:~/RTIMULib2-master/RTIMULib/build# make -j
+</code></pre><h3 id="compile-application">Compile Application</h3>
+<p>Some of the applications need Qt4 library that doesn&rsquo;t exist on the Yocto built we prepared, so we will first comment those off in <!-- raw HTML omitted -->/Linux/CMakeLists.txt:</p>
+<pre tabindex="0"><code>OPTION(BUILD_GL &#34;Build RTIMULibGL&#34; OFF)                                                 
+OPTION(BUILD_DRIVE &#34;Build RTIMULibDrive&#34; ON)                                            
+OPTION(BUILD_DRIVE10 &#34;Build RTIMULibDrive10&#34; ON)                                        
+OPTION(BUILD_DRIVE11 &#34;Build RTIMULibDrive11&#34; ON)                                        
+OPTION(BUILD_CAL &#34;Build RTIMULibCal&#34; OFF)                                               
+OPTION(BUILD_DEMO &#34;Build RTIMULibDemo&#34; OFF)                                             
+</code></pre><p>Then compile:</p>
+<pre tabindex="0"><code>root@jetson-tx2:~/RTIMULib2-master/Linux/build# pwd
+/home/root/RTIMULib2-master/Linux/build
+root@jetson-tx2:~/RTIMULib2-master/Linux/build# cmake ..
+root@jetson-tx2:~/RTIMULib2-master/Linux/build# make -j
+</code></pre><p>On our J120 board (or setting in device tree?), the MPU-9250 is on SPI bus 1 device 0 (spidev1.0). A related <a href="https://forums.developer.nvidia.com/t/running-rtimulib2-on-tx1-with-auvidea-j120-carrier-board/51052">forum disucssion</a> confirmed this as well. So we have to modify RTIMULib.ini configuration before running apps.</p>
+<pre tabindex="0"><code># IMU type -                                                           
+#   ...
+#   7 = InvenSense MPU-9250                               
+#   8 = STM L3GD20H + LSM303DLHC                          
+#   ...
+IMUType=7                       
+                                                            
+# Is bus I2C: &#39;true&#39; for I2C, &#39;false&#39; for SPI                
+BusIsI2C=false                                               
+                
+# SPI Bus (between 0 and 7)
+SPIBus=1                   
+                              
+# SPI select (between 0 and 1)
+SPISelect=0                  
+</code></pre><p>Run the app (guess the MPU is not calibrated, so the data are not trust-worthy):</p>
+<pre tabindex="0"><code>root@jetson-tx2:~/RTIMULib2-master/Linux/build/RTIMULibDrive11# vi RTIMULib.ini 
+root@jetson-tx2:~/RTIMULib2-master/Linux/build/RTIMULibDrive11# sudo ./RTIMULibDrive11 
+Settings file RTIMULib.ini loaded
+Using fusion algorithm RTQF
+Detected MS5611 at standard address
+Detected HTU21D at standard address
+min/max compass calibration not in use
+Ellipsoid compass calibration not in use
+Accel calibration not in use
+MPU-9250 init complete
+Sample rate 0: : roll:179.025433, pitch:-0.544863, yaw:43.259560
+Pressure: -334.6, height above sea level:  nan, temperature:  0.0, humidity:  0.0
+Sample rate 0: : roll:178.940793, pitch:-0.527068, yaw:43.185848
+Pressure: -268.4, height above sea level:  nan, temperature: -46.8, humidity:  0.0
+Sample rate 0: : roll:178.934127, pitch:-0.513112, yaw:43.088907
+Pressure: -268.4, height above sea level:  nan, temperature: -46.8, humidity: -16.8
+Sample rate 0: : roll:178.963428, pitch:-0.509524, yaw:42.994914
+Pressure: -268.4, height above sea level:  nan, temperature: -46.8, humidity: -16.8
+Sample rate 85: : roll:179.010133, pitch:-0.507106, yaw:42.906466
+Pressure: -268.4, height above sea level:  nan, temperature: -46.8, humidity: -16.8
+Sample rate 85: : roll:179.057616, pitch:-0.509052, yaw:42.830696
+Pressure: -268.4, height above sea level:  nan, temperature: -46.8, humidity: -16.8
+...
+</code></pre></div>
+</article>
+
+
+
+
+
+
+                    </main><footer>
+    <hr />
+
+<p><small>
+        2024 &copy; 
+    </small></p>
+    <p><small>
+        <a href='https://gitlab.com/gabmus/hugo-ficurinia'>Ficurinia theme</a> for <a href='https://gohugo.io'>Hugo</a> by <a href='https://gabmus.org'>Gabriele Musco</a>. Licensed under <a href='https://www.gnu.org/licenses/agpl-3.0.html'>GNU AGPLv3</a>.
+    </small></p>
+</footer>
+</div>
+            </div>
+        </div>
+
+
+</body>
+</html>
