@@ -2,11 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://jinchenglee.github.io/posts/09212024_orin_nano_camera_devicetree_and_overlay/</loc>
+    <lastmod>2024-12-07T11:30:39-08:00</lastmod>
+  </url><url>
     <loc>https://jinchenglee.github.io/posts/</loc>
-    <lastmod>2024-06-29T21:06:18-07:00</lastmod>
+    <lastmod>2024-12-07T11:30:39-08:00</lastmod>
   </url><url>
     <loc>https://jinchenglee.github.io/</loc>
-    <lastmod>2024-06-29T21:06:18-07:00</lastmod>
+    <lastmod>2024-12-07T11:30:39-08:00</lastmod>
   </url><url>
     <loc>https://jinchenglee.github.io/posts/06282024_yocto_l4t_r32.3.1_on_tx2_j120/</loc>
     <lastmod>2024-06-29T21:06:18-07:00</lastmod>

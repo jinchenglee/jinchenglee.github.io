@@ -5,7 +5,176 @@
     <description>Recent content in Posts on Vitob&#39;s Blog Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 29 Jun 2024 21:06:18 -0700</lastBuildDate><atom:link href="https://jinchenglee.github.io/posts/index.xml" rel="self" type="application/rss+xml" /><icon>https://jinchenglee.github.io/img/icon.svg</icon>
+    <lastBuildDate>Sat, 07 Dec 2024 11:30:39 -0800</lastBuildDate><atom:link href="https://jinchenglee.github.io/posts/index.xml" rel="self" type="application/rss+xml" /><icon>https://jinchenglee.github.io/img/icon.svg</icon>
+    
+    
+    <item>
+      <title>Orin Nano Camera DeviceTree and Overlay</title>
+      <link>https://jinchenglee.github.io/posts/09212024_orin_nano_camera_devicetree_and_overlay/</link>
+      <pubDate>Sat, 07 Dec 2024 11:30:39 -0800</pubDate>
+      
+      <guid>https://jinchenglee.github.io/posts/09212024_orin_nano_camera_devicetree_and_overlay/</guid>
+      <description><![CDATA[<h1 id="jetson-orin-nano-device-tree-and-overlay-for-csi-cameras">Jetson Orin Nano Device Tree and Overlay for CSI Cameras</h1>
+<p>Recently I&rsquo;m turning to play with Jetson Orin Nano, trying to bring up Sony imx296 camera via one of its CSI port. Getting camera to work is quite involved, embedded Linux systems don&rsquo;t have such support of easy installing drivers for cameras. This blog records what I learned in the process.</p>
+<h2 id="sku-and-jetpack-versions">SKU and Jetpack Versions</h2>
+<p>These matters a lot when you try to bring up something on your Jetson system.</p>
+<p>Jetpack is provided by NVidia, mainly for the BSP (board specific package?) SW, Embedded Linux for Tegra (L4T) and developing tools etc.</p>
+<p>Hardware wise, besides the core board provided by NVidia, different carrier board vendors have different design, thus they need to &ldquo;patch&rdquo; the BSP appropriately.</p>
+<p>In this blog, we&rsquo;ll focus on the stock Jetson Orin Nano Development Kit (8GB) - <code>Jetson Orin Nano Carrier board (P3768-0000)</code>, and <code>Jetson Orin Nano 8GB module (P3767-0003)</code> (guess these are the SKUs).</p>
+<ul>
+<li>
+<p>The Jetpack versions can be figured out: <a href="https://developer.nvidia.com/embedded/jetpack">latest Jetpack</a>, or <a href="https://developer.nvidia.com/embedded/jetpack-archive">archived</a> ones.</p>
+</li>
+<li>
+<p>The SKU for boards matter too. In <a href="https://docs.nvidia.com/jetson/archives/r36.3/ReleaseNotes/Jetson_Linux_Release_Notes_r36.3.pdf">L4T R36.3 Release Notes</a>, the Orin Series SKUs are listed:</p>
+</li>
+</ul>
+<pre tabindex="0"><code>jetson-agx-orin-devkit-industrial.conf: Flashes the Jetson
+Orin industrial module (P3701-0008), which is attached to a
+Jetson Orin reference carrier board (P3737-0000).
+jetson-orin-nano-devkit.conf: Flashes one of the following
+modules that is attached to a Jetson Orin Nano Carrier
+board (P3768-0000):
+● Jetson Orin Nano developer kit module with SD Card
+(P3767-0005)
+● Jetson Orin Nano 8GB module (P3767-0003)
+● Jetson Orin Nano 4GB module (P3767-0004)
+● Jetson Orin NX 16GB module (P3767-0000)
+● Jetson Orin NX 8GB module (P3767-0001)
+jetson-agx-orin-devkit.conf: Flashes one of the following
+modules that is attached to a Jetson AGX Orin Developer
+Kit (P3730-0000) reference carrier board (P3737-0000):
+● Jetson AGX Orin developer kit module (P3701-0000)
+● Jetson AGX Orin 32GB module (P3701-0004)
+● Jetson AGX Orin 64GB module (P3701-0005)
+</code></pre><h2 id="orin-nano-default-devicetree-for-cameras">Orin Nano Default DeviceTree for Cameras</h2>
+<p>Assume the L4T and Jetpack SW locates at <code>/work/l4t/r36.3/Linux_for_Tegra</code>.</p>
+<ul>
+<li>In file <code>jetson-orin-nano-devkit.conf</code>, you will notice this line:</li>
+</ul>
+<pre tabindex="0"><code>OVERLAY_DTB_FILE+=&#34;,tegra234-p3768-0000+p3767-0000-dynamic.dtbo&#34;;
+</code></pre><p>This is, I guess, the overlay file that specifies the default camera setup for Orin Nano devkit.</p>
+<ul>
+<li>Tracing into <code>./source/hardware/nvidia/t23x/nv-public/overlay/tegra234-p3768-0000+p3767-0000-dynamic.dts</code>:</li>
+</ul>
+<pre tabindex="0"><code>#include &#34;tegra234-p3768-camera-rbpcv2-imx219.dtsi&#34;
+</code></pre><ul>
+<li>Tracing into <code>./source/hardware/nvidia/t23x/nv-public/overlay/tegra234-p3768-camera-rbpcv2-imx219.dtsi</code>. Here you find the default imx219 camera is used as default. This <a href="https://forums.developer.nvidia.com/t/xavier-nx-r32-7-1-changes-to-dtsi-overlay-for-cameras-has-no-effect/229204/10">article</a> from Nvidia developer&rsquo;s forum provides good hint.</li>
+</ul>
+<pre tabindex="0"><code>#define CAM0_RST        TEGRA234_MAIN_GPIO(H, 3)
+#define CAM0_PWDN	TEGRA234_MAIN_GPIO(H, 6)
+#define CAM1_PWDN	TEGRA234_MAIN_GPIO(AC, 0)
+#define CAM_I2C_MUX 	TEGRA234_AON_GPIO(CC, 3)
+
+#include &lt;dt-bindings/tegra234-p3767-0000-common.h&gt;
+#include &#34;tegra234-camera-rbpcv2-imx219.dtsi&#34;
+
+/ {
+	fragment-camera-imx219@0 {
+		target-path = &#34;/&#34;;
+		__overlay__ {
+			bus@0 {
+				cam_i2cmux{
+					status = &#34;okay&#34;;
+					compatible = &#34;i2c-mux-gpio&#34;;
+					#address-cells = &lt;1&gt;;
+					#size-cells = &lt;0&gt;;
+					i2c-parent = &lt;&amp;cam_i2c&gt;;
+					mux-gpios = &lt;&amp;gpio_aon CAM_I2C_MUX GPIO_ACTIVE_HIGH&gt;;
+					i2c@0 {
+						status = &#34;okay&#34;;
+						reg = &lt;0&gt;;
+						#address-cells = &lt;1&gt;;
+						#size-cells = &lt;0&gt;;
+						rbpcv2_imx219_a@10 {
+							reset-gpios = &lt;&amp;gpio CAM0_PWDN GPIO_ACTIVE_HIGH&gt;;
+						};
+					};
+					i2c@1 {
+						status = &#34;okay&#34;;
+						reg = &lt;1&gt;;
+						#address-cells = &lt;1&gt;;
+						#size-cells = &lt;0&gt;;
+						rbpcv2_imx219_c@10 {
+							reset-gpios = &lt;&amp;gpio CAM1_PWDN GPIO_ACTIVE_HIGH&gt;;
+						};
+					};
+				};
+				gpio@2200000 {
+					camera-control-output-low {
+						gpio-hog;
+						output-low;
+						gpios = &lt;CAM0_RST 0&gt;;
+						label = &#34;cam0-rst&#34;;
+					};
+				};
+			};
+		};
+	};
+};
+</code></pre><h2 id="change-bootup-time-overlay">Change bootup time overlay</h2>
+<p>Change /boot/extlinux/extlinux.config setting can change the boot options. Please remember to keep a backup version so you can always revert back to a known working kernel/state.</p>
+<p>According to this forum <a href="https://forums.developer.nvidia.com/t/place-custom-overlay-file-via-extlinux-conf/298287/3">reply</a>, combination of FDT and OVERLAYS works, single FDT works, but single OVERLAYS line won&rsquo;t.</p>
+<pre tabindex="0"><code>nvidia@ubuntu:~$ cat /boot/extlinux/extlinux.conf
+TIMEOUT 30
+DEFAULT primary
+
+MENU TITLE L4T boot options
+
+LABEL primary
+      MENU LABEL primary kernel
+      LINUX /boot/Image
+      FDT /boot/dtb/kernel_tegra234-p3768-0000+p3767-0005-nv.dtb
+      INITRD /boot/initrd
+      APPEND ${cbootargs} root=PARTUUID=3c59f6a7-eb36-494c-be52-0bfab7f91e4b rw rootwait rootfstype=ext4 mminit_loglevel=4 console=ttyTCU0,115200 firmware_class.path=/etc/firmware fbcon=map:0 net.ifnames=0 nospectre_bhb video=efifb:off console=tty0 nv-auto-config 
+      OVERLAYS /boot/tegra234-p3767-camera-p3768-imx296-C.dtbo
+
+LABEL backup
+   MENU LABEL backup kernel
+   LINUX /boot/Image.backup
+   INITRD /boot/initrd
+   APPEND ${cbootargs} root=PARTUUID=3c59f6a7-eb36-494c-be52-0bfab7f91e4b rw rootwait rootfstype=ext4 mminit_loglevel=4 console=ttyTCU0,115200 firmware_class.path=/etc/firmware fbcon=map:0 net.ifnames=0 nospectre_bhb video=efifb:off console=tty0 nv-auto-config 
+</code></pre><h2 id="load-your-camera-driver">Load your camera driver</h2>
+<h2 id="confirm-port-binding-connections">Confirm Port Binding Connections</h2>
+<p>According to NVidia official <a href="https://docs.nvidia.com/jetson/archives/r36.3/DeveloperGuide/SD/CameraDevelopment/SensorSoftwareDriverProgramming.html#port-binding">doc</a>, this can be verified as below (camera -&gt; CSI -&gt; VI):</p>
+<pre tabindex="0"><code>nvidia@ubuntu:~$ sudo media-ctl -p -d /dev/media0
+[sudo] password for nvidia: 
+Media controller API version 5.15.136
+
+Media device information
+------------------------
+driver          tegra-camrtc-ca
+model           NVIDIA Tegra Video Input Device
+serial          
+bus info        
+hw revision     0x3
+driver version  5.15.136
+
+Device topology
+- entity 1: 13e00000.host1x:nvcsi@15a00000- (2 pads, 2 links)
+            type V4L2 subdev subtype Unknown flags 0
+            device node name /dev/v4l-subdev0
+	pad0: Sink
+		&lt;- &#34;imx296 9-001a&#34;:0 [ENABLED]
+	pad1: Source
+		-&gt; &#34;vi-output, imx296 9-001a&#34;:0 [ENABLED]
+
+- entity 4: imx296 9-001a (1 pad, 1 link)
+            type V4L2 subdev subtype Sensor flags 0
+            device node name /dev/v4l-subdev1
+	pad0: Source
+		[fmt:SRGGB10_1X10/1456x1088 field:none colorspace:srgb]
+		-&gt; &#34;13e00000.host1x:nvcsi@15a00000-&#34;:0 [ENABLED]
+
+- entity 6: vi-output, imx296 9-001a (1 pad, 1 link)
+            type Node subtype V4L flags 0
+            device node name /dev/video0
+	pad0: Sink
+		&lt;- &#34;13e00000.host1x:nvcsi@15a00000-&#34;:1 [ENABLED]
+</code></pre>]]></description>
+      
+    </item>
+    
     
     
     <item>
